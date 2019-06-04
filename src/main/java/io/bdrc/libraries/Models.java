@@ -435,7 +435,6 @@ public class Models  {
      * 
      * @param facet the type of facet node to create
      * @param rez the resource the node is associated w/ such as via bdo:creator
-     * @param user a string identifying the user or tool requesting the facet node
      * @return the newly minted facet node resource of rdf:type default nodeType for the facet
      */
     public static Resource getFacetNode(FacetType facet, Resource rez) {
@@ -449,7 +448,6 @@ public class Models  {
      * 
      * @param facet the type of facet node to create
      * @param rez the resource the node is associated w/ such as via bdo:creator
-     * @param user a string identifying the user or tool requesting the facet node
      * @param nodeType the class for the type of node
      * @return the newly minted facet node resource of rdf:type nodeType
      */
