@@ -14,4 +14,4 @@ Basic mvn:
     mvn clean package
     mvn deploy -DperformRelease=true
 
-Then go to `https://oss.sonatype.org/` and do the *close* and *release*
+Then go to `https://oss.sonatype.org/`  and do the *close* and *release*
