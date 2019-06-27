@@ -90,11 +90,7 @@ public class Models  {
 
     public static String getMd5(String resId) {
         try {
-            // keeping files from the same work together:
-            final int underscoreIndex = resId.indexOf('_');
             String message = resId;
-            if (underscoreIndex != -1)
-                message = resId.substring(0, underscoreIndex);
             final byte[] bytesOfMessage = message.getBytes("UTF-8");
             final byte[] hashBytes = md5.digest(bytesOfMessage);
             BigInteger bigInt = new BigInteger(1,hashBytes);
