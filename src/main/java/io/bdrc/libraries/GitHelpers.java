@@ -108,6 +108,22 @@ public class GitHelpers {
         return rev;
     }
 
+    public static RevCommit commitDelete(String type, String deletePath, String commitMessage) {
+        Repository r = typeRepo.get(type);
+        RevCommit rev = null;
+        if (r == null)
+            return null;
+        Git git = new Git(r);
+        try {
+            git.rm().addFilepattern(deletePath).call();
+            rev = git.commit().setMessage(commitMessage).call();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+        git.close();
+        return rev;
+    }
+
     public static Repository getLocalRepo(String type) {
         return typeRepo.get(type);
     }
@@ -124,7 +140,7 @@ public class GitHelpers {
     public static Iterable<PushResult> push(String type, String REMOTE_BASE_URL, UsernamePasswordCredentialsProvider prov, String REPOS_BASE_DIR) throws InvalidRemoteException, TransportException, GitAPIException {
         GitHelpers.ensureGitRepo(type, REPOS_BASE_DIR);
         Git git = new Git(getLocalRepo(type));
-        Iterable<PushResult> res = git.push().setCredentialsProvider(prov).setRemote(REMOTE_BASE_URL + "/" + type + "s").call();
+        Iterable<PushResult> res = git.push().setCredentialsProvider(prov).setRemote(REMOTE_BASE_URL + type + "s").call();
         git.close();
         return res;
     }
@@ -132,7 +148,7 @@ public class GitHelpers {
     public static Iterable<PushResult> push(String type, String REMOTE_BASE_URL, String user, String pass, String REPOS_BASE_DIR) throws InvalidRemoteException, TransportException, GitAPIException {
         GitHelpers.ensureGitRepo(type, REPOS_BASE_DIR);
         Git git = new Git(getLocalRepo(type));
-        Iterable<PushResult> res = git.push().setCredentialsProvider(new UsernamePasswordCredentialsProvider(user, pass)).setRemote(REMOTE_BASE_URL + "/" + type + "s").call();
+        Iterable<PushResult> res = git.push().setCredentialsProvider(new UsernamePasswordCredentialsProvider(user, pass)).setRemote(REMOTE_BASE_URL + type + "s").call();
         git.close();
         return res;
     }
