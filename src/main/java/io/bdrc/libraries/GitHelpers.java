@@ -31,6 +31,7 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 public class GitHelpers {
 
     public static final String gitignore = "# Ignore everything\n" + "*\n" + "# Don't ignore directories, so we can recurse into them\n" + "!*/\n" + "# Don't ignore .gitignore and *.foo files\n" + "!.gitignore\n" + "!*.trig\n" + "";
+    public static final Map<String, String> typeToRepo = new HashMap<>();
 
     public static void createDirIfNotExists(String dir) {
         File theDir = new File(dir);
