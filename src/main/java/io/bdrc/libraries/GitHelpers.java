@@ -111,7 +111,7 @@ public class GitHelpers {
         return rev;
     }
 
-    public static RevCommit commitDelete(String type, String deletePath, String commitMessage, boolean allowEmpty) {
+    public static RevCommit commitDelete(String type, String deletePath, String commitMessage) {
         Repository r = typeRepo.get(type);
         RevCommit rev = null;
         if (r == null)
@@ -120,7 +120,7 @@ public class GitHelpers {
         try {
             git.rm().addFilepattern(deletePath).call();
             if (!git.status().call().isClean()) {
-                rev = git.commit().setAllowEmpty(allowEmpty).setMessage(commitMessage).call();
+                rev = git.commit().setMessage(commitMessage).call();
             }
             ;
         } catch (GitAPIException e) {
