@@ -7,7 +7,7 @@ Current version: 0.4.1
     <dependency>
       <groupId>io.bdrc.libraries</groupId>
       <artifactId>bdrc-libraries</artifactId>
-      <version>0.1.0</version>
+      <version>0.4.1</version>
     </dependency>
 
 ### Some release info
