@@ -1,7 +1,7 @@
 # bdrc-libraries
 Repo for common code libraries to be used across tools such as xmltoldmigration, git-to-dbs, and editserv
 
-Current version: 0.4.0
+Current version: 0.4.1
 
 ### Maven dependency
     <dependency>
