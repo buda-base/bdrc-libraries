@@ -143,6 +143,14 @@ public class GitHelpers {
         return res;
     }
 
+    public static String pull(String type) throws GitAPIException {
+        Repository r = typeRepo.get(type);
+        Git git = new Git(r);
+        PullResult res = git.pull().setProgressMonitor(new TextProgressMonitor()).setRemote("origin").call();
+        git.close();
+        return Boolean.toString(res.isSuccessful());
+    }
+
     public static Iterable<PushResult> push(String type, String REMOTE_BASE_URL, UsernamePasswordCredentialsProvider prov, String REPOS_BASE_DIR) throws InvalidRemoteException, TransportException, GitAPIException {
         GitHelpers.ensureGitRepo(type, REPOS_BASE_DIR);
         Git git = new Git(getLocalRepo(type));
