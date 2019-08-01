@@ -1,4 +1,4 @@
-package io.bdrc.iiif.presentation.exceptions;
+package io.bdrc.libraries;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -6,8 +6,7 @@ import java.io.StringWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BDRCAPIException extends Exception
-{
+public class IdentifierException extends Exception {
     private static final Logger logger = LoggerFactory.getLogger(Exception.class);
     private static final long serialVersionUID = -5379981810772284216L;
     int status;
@@ -16,11 +15,10 @@ public class BDRCAPIException extends Exception
     String developerMessage;
     String message;
 
-    public BDRCAPIException() {
+    public IdentifierException() {
     }
 
-    public BDRCAPIException(int status, int code, String message,
-            String developerMessage, String link) {
+    public IdentifierException(int status, int code, String message, String developerMessage, String link) {
         super(message);
         this.status = status;
         this.code = code;
@@ -32,7 +30,7 @@ public class BDRCAPIException extends Exception
         }
     }
 
-    public BDRCAPIException(int status, int code, String message) {
+    public IdentifierException(int status, int code, String message) {
         super(message);
         this.status = status;
         this.code = code;
@@ -44,7 +42,7 @@ public class BDRCAPIException extends Exception
         }
     }
 
-    public BDRCAPIException(int status, int code, Exception e) {
+    public IdentifierException(int status, int code, Exception e) {
         super(e.getMessage());
         this.status = status;
         this.code = code;
@@ -63,6 +61,10 @@ public class BDRCAPIException extends Exception
         this.status = status;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
     public void setCode(int code) {
         this.code = code;
     }
@@ -71,8 +73,16 @@ public class BDRCAPIException extends Exception
         return code;
     }
 
+    public String getDeveloperMessage() {
+        return developerMessage;
+    }
+
     public void setDeveloperMessage(String developerMessage) {
         this.developerMessage = developerMessage;
+    }
+
+    public String getLink() {
+        return link;
     }
 
     public void setLink(String link) {

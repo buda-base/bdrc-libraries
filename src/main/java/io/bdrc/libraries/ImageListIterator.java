@@ -1,4 +1,4 @@
-package io.bdrc.iiif.presentation.models;
+package io.bdrc.libraries;
 
 import java.util.Iterator;
 
