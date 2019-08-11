@@ -147,6 +147,19 @@ public class LangStrings  {
             }
             return null;
         }
+        if (language == "khmer") {
+            if (encoding == "km") {
+                return "km";
+            } else if (encoding == "kmfemc") {
+                return "km-x-kmfemc" ;
+            }
+        } else if (language == "pāli") {
+            if (encoding == "km") {
+                return "pi-Khmr";
+            } else if (encoding == "kmfemc") {
+                return "pi-x-kmfemc" ;
+            }
+        }
         return getIso639(language)+getBCP47Suffix(encoding);
     }
 
