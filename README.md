@@ -13,6 +13,16 @@ Current version: 0.4.8
 ### Some release info
 Basic mvn:
 
+First time in a fresh clone:
+
+    git submodule update --init
+
+later:
+
+    git submodule update --recursive --remote
+    
+build and deploy:
+
     mvn clean package
     mvn deploy -DperformRelease=true
 

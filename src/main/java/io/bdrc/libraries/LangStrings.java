@@ -17,7 +17,6 @@ import org.w3c.dom.Element;
 
 import com.atlascopco.hunspell.Hunspell;
 
-//
 import io.bdrc.ewtsconverter.EwtsConverter;
 
 public class LangStrings  {
@@ -263,8 +262,9 @@ public class LangStrings  {
             return false;
         Matcher m = p.matcher(uni);
         while (m.find()) {
-            if (!speller.isCorrect(m.group(0)))
+            if (!speller.isCorrect(m.group(0))) {
                 return false;
+            }
         }
         return true;
     }

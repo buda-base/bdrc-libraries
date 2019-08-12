@@ -20,15 +20,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import io.bdrc.ewtsconverter.EwtsConverter;
-//import io.bdrc.xmltoldmigration.helpers.ExceptionHelper;
-//import io.bdrc.xmltoldmigration.helpers.ImageListTranslation;
-//import io.bdrc.xmltoldmigration.helpers.SymetricNormalization;
-//import io.bdrc.xmltoldmigration.xml2files.CommonMigration;
-//import io.bdrc.xmltoldmigration.xml2files.EtextBodyMigration;
-//import io.bdrc.xmltoldmigration.xml2files.EtextMigration;
-//import io.bdrc.xmltoldmigration.xml2files.EtextMigration.EtextInfos;
-//import io.bdrc.xmltoldmigration.xml2files.PersonMigration;
-//import io.bdrc.xmltoldmigration.xml2files.WorkMigration;
 
 
 /**
@@ -47,20 +38,9 @@ public class MigrationTest
    @AfterClass
     public static void close() {
         speller.close();
-//        ExceptionHelper.closeAll();
-//        System.out.println("finishing with the following triples to be added:");
-//        System.out.println(SymetricNormalization.triplesToAdd.toString());
-//        System.out.println("and the following person events to be added in places:");
-//        System.out.println(PersonMigration.placeEvents.toString());
     }
 
 	public void flushLog() {
-//	    try {
-//            MigrationHelpers.logWriter.flush();
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
 	}
 	
 	public String toUnicode(String s, List<String>conversionWarnings) {
