@@ -16,19 +16,17 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.jena.ontology.OntModel;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import io.bdrc.ewtsconverter.EwtsConverter;
-import org.w3c.dom.Document;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 
 /**
@@ -121,25 +119,25 @@ public class LangStringsTest
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.newDocument();
-            Element elem = doc.createElement("title");
+            Element elem = doc.createElementNS("http://www.tbrc.org/models/work#", "w:title");
             elem.setTextContent("lorem ipsum, gypsum");
             elem.setAttribute("lang", "khmer");
             elem.setAttribute("encoding", "km");
-            String tag = getBCP47(elem, "zippo", "", "", "");
+            String tag = getBCP47(elem, "zippo");
             assertEquals(tag, "km");
             elem.setAttribute("encoding", "kmfemc");
-            tag = getBCP47(elem, "zappo", "", "", "");
+            tag = getBCP47(elem, "zappo");
             assertEquals(tag, "km-x-kmfemc");
             elem.setAttribute("lang", "pāli");
             elem.setAttribute("encoding", "km");
-            tag = getBCP47(elem, "sippo", "", "", "");
+            tag = getBCP47(elem, "sippo");
             assertEquals(tag, "pi-Khmr");
             elem.setAttribute("encoding", "kmfemc");
-            tag = getBCP47(elem, "sappo", "", "", "");
+            tag = getBCP47(elem, "sappo");
             assertEquals(tag, "pi-x-kmfemc");
             elem.setAttribute("lang", "tibetan");
             elem.setAttribute("encoding", "extendedWylie");
-            tag = getBCP47(elem, "jacko", "", "", "");
+            tag = getBCP47(elem, "jacko");
             assertEquals(tag, "bo-x-ewts");
         } catch (Exception ex) {
             ex.printStackTrace();

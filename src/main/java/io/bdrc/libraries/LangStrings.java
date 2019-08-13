@@ -146,16 +146,16 @@ public class LangStrings  {
             }
             return null;
         }
-        if (language == "khmer") {
-            if (encoding == "km") {
+        if ("khmer".equals(language)) {
+            if ("km".equals(encoding)) {
                 return "km";
-            } else if (encoding == "kmfemc") {
+            } else if ("kmfemc".equals(encoding)) {
                 return "km-x-kmfemc" ;
             }
-        } else if (language == "pāli") {
-            if (encoding == "km") {
+        } else if ("pāli".equals(language)) {
+            if ("km".equals(encoding)) {
                 return "pi-Khmr";
-            } else if (encoding == "kmfemc") {
+            } else if ("kmfemc".equals(encoding)) {
                 return "pi-x-kmfemc" ;
             }
         }
@@ -269,7 +269,7 @@ public class LangStrings  {
         return true;
     }
 
-    public static String getBCP47(Element e, String propertyHint, String RID, String subRID) {
+    public static String getBCP47(Element e) {
         String lang = e.getAttribute("lang");
         String encoding = e.getAttribute("encoding");
         // some entries have language in "type"
@@ -320,8 +320,8 @@ public class LangStrings  {
         return res;
     }
 
-    public static String getBCP47(Element e, String dflt, String propertyHint, String RID, String subRID) {
-        String res = getBCP47(e, propertyHint, RID, subRID);
+    public static String getBCP47(Element e, String dflt) {
+        String res = getBCP47(e);
         if (dflt != null && (res == null || res.isEmpty())) {
             return dflt;
         }
