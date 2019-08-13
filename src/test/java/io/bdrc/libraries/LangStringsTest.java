@@ -22,6 +22,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import io.bdrc.ewtsconverter.EwtsConverter;
+import org.w3c.dom.Document;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 /**
@@ -109,5 +116,33 @@ public class LangStringsTest
         assertEquals(getBCP47("khmer", "kmfemc"), "km-x-kmfemc");
         assertEquals(getBCP47("pāli", "km"), "pi-Khmr");
         assertEquals(getBCP47("pāli", "kmfemc"), "pi-x-kmfemc");
+        
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.newDocument();
+            Element elem = doc.createElement("title");
+            elem.setTextContent("lorem ipsum, gypsum");
+            elem.setAttribute("lang", "khmer");
+            elem.setAttribute("encoding", "km");
+            String tag = getBCP47(elem, "zippo", "", "", "");
+            assertEquals(tag, "km");
+            elem.setAttribute("encoding", "kmfemc");
+            tag = getBCP47(elem, "zappo", "", "", "");
+            assertEquals(tag, "km-x-kmfemc");
+            elem.setAttribute("lang", "pāli");
+            elem.setAttribute("encoding", "km");
+            tag = getBCP47(elem, "sippo", "", "", "");
+            assertEquals(tag, "pi-Khmr");
+            elem.setAttribute("encoding", "kmfemc");
+            tag = getBCP47(elem, "sappo", "", "", "");
+            assertEquals(tag, "pi-x-kmfemc");
+            elem.setAttribute("lang", "tibetan");
+            elem.setAttribute("encoding", "extendedWylie");
+            tag = getBCP47(elem, "jacko", "", "", "");
+            assertEquals(tag, "bo-x-ewts");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 	}
 }
