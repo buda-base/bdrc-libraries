@@ -1,12 +1,14 @@
 package io.bdrc.libraries;
 
 import static io.bdrc.libraries.LangStrings.addEwtsShad;
+import static io.bdrc.libraries.LangStrings.getBCP47;
 import static io.bdrc.libraries.LangStrings.isAllTibetanUnicode;
 import static io.bdrc.libraries.LangStrings.isLikelyEnglish;
 import static io.bdrc.libraries.LangStrings.isMostLikelyEwts;
 import static io.bdrc.libraries.LangStrings.isStandardTibetan;
 import static io.bdrc.libraries.LangStrings.normalizeTibetan;
 import static io.bdrc.libraries.LangStrings.speller;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -25,7 +27,7 @@ import io.bdrc.ewtsconverter.EwtsConverter;
 /**
  * Unit test for simple App.
  */
-public class MigrationTest 
+public class LangStringsTest 
 {
 	final static String TESTDIR = "src/test/";
 	public static OntModel ontology = null;
@@ -99,5 +101,13 @@ public class MigrationTest
 	    assertFalse(isStandardTibetan("བོད a"));
 	    assertFalse(isStandardTibetan("abc"));
 	    assertFalse(isStandardTibetan("རཀག"));
+	}
+	
+	@Test
+	public void testGetBCP47() {
+        assertEquals(getBCP47("khmer", "km"), "km");
+        assertEquals(getBCP47("khmer", "kmfemc"), "km-x-kmfemc");
+        assertEquals(getBCP47("pāli", "km"), "pi-Khmr");
+        assertEquals(getBCP47("pāli", "kmfemc"), "pi-x-kmfemc");
 	}
 }
