@@ -112,7 +112,7 @@ public class LangStringsTest
 	public void testGetBCP47() {
         assertEquals(getBCP47("khmer", "km"), "km");
         assertEquals(getBCP47("khmer", "kmfemc"), "km-x-kmfemc");
-        assertEquals(getBCP47("pāli", "km"), "pi-Khmr");
+        assertEquals(getBCP47("pāli", "km"), "pi-khmr");
         assertEquals(getBCP47("pāli", "kmfemc"), "pi-x-kmfemc");
         
         try {
@@ -131,7 +131,7 @@ public class LangStringsTest
             elem.setAttribute("lang", "pāli");
             elem.setAttribute("encoding", "km");
             tag = getBCP47(elem, "sippo");
-            assertEquals(tag, "pi-Khmr");
+            assertEquals(tag, "pi-khmr");
             elem.setAttribute("encoding", "kmfemc");
             tag = getBCP47(elem, "sappo");
             assertEquals(tag, "pi-x-kmfemc");

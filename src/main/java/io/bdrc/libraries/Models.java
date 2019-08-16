@@ -235,10 +235,14 @@ public class Models {
 
     public enum FacetType {
 
-        CORP_MEMBER("corporationMember", "CM", BDO + "CorporationMember"), CREATOR("creator", "CR", BDO + "AgentAsCreator"), ETEXT_CHUNK("etextChunk", "EC", BDO + "EtextChunk"), ETEXT_LINE("etextLine", "EL", BDO + "EtextLine"),
-        ETEXT_PAGE("etextPage", "EP", BDO + "EtextPage"), ETEXT_REF("etextRef", "ER", BDO + "EtextRef"), EVENT("event", "EV", BDO + "Event"), HOLDER("lineageHolder", "LH", BDO + "LineageHolder"),
-        LINEAGE_HOLDER("lineageHolder", "LH", BDO + "LineageHolder"), LOG_ENTRY("logEntry", "LG", ADM + "LogEntry"), NAME("name", "NM", BDO + "PersonName"), NOTE("note", "NT", BDO + "Note"), PRODUCT_ORG("productOrg", "PG", ADM + "ProductOrg"),
-        TITLE("title", "TT", BDO + "WorkTitle"), VCARD_ADDR("vcardAddr", "VA", VCARD + "Address"), VOLUME("volume", "VL", BDO + "Volume"), WORK_LOC("workLoc", "WL", BDO + "WorkLocation");
+        CORP_MEMBER("corporationMember", "CM", BDO + "CorporationMember"), CREATOR("creator", "CR", BDO + "AgentAsCreator"), 
+        ETEXT_CHUNK("etextChunk", "EC", BDO + "EtextChunk"), ETEXT_LINE("etextLine", "EL", BDO + "EtextLine"),
+        ETEXT_PAGE("etextPage", "EP", BDO + "EtextPage"), ETEXT_REF("etextRef", "ER", BDO + "EtextRef"), EVENT("event", "EV", BDO + "Event"), 
+        HOLDER("lineageHolder", "LH", BDO + "LineageHolder"),
+        LINEAGE_HOLDER("lineageHolder", "LH", BDO + "LineageHolder"), LOG_ENTRY("logEntry", "LG", ADM + "LogEntry"), 
+        NAME("name", "NM", BDO + "PersonName"), NOTE("note", "NT", BDO + "Note"), PRODUCT_ORG("productOrg", "PG", ADM + "ProductOrg"),
+        TITLE("title", "TT", BDO + "WorkTitle"), VCARD_ADDR("vcardAddr", "VA", VCARD + "Address"), VOLUME("volume", "VL", BDO + "Volume"), 
+        WORK_LOC("workLoc", "WL", BDO + "WorkLocation"), MICROFILM("workMicrofilm", "MF", BDO + "ObjectTypeMicrofilm");
 
         private String label;
         private String prefix;

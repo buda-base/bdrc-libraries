@@ -154,7 +154,7 @@ public class LangStrings  {
             }
         } else if ("pāli".equals(language)) {
             if ("km".equals(encoding)) {
-                return "pi-Khmr";
+                return "pi-khmr";
             } else if ("kmfemc".equals(encoding)) {
                 return "pi-x-kmfemc" ;
             }
