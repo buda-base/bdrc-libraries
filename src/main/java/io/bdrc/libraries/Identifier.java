@@ -18,6 +18,7 @@ public class Identifier {
     public static final int MANIFEST_ID_VOLUMEID = 5;
     public static final int MANIFEST_ID_WORK_IN_VOLUMEID = 6;
     public static final int MANIFEST_ID_VOLUMEID_OUTLINE = 8;
+    public static final int MANIFEST_ID_WORK_IN_VOLUMEID_OUTLINE = 10;
 
     @JsonProperty("id")
     String id = null;
@@ -133,9 +134,14 @@ public class Identifier {
         case "wv":
             this.workId = firstId;
             this.volumeId = secondId;
-            setPageNumFromIdPart(thirdId);
-            nbMaxPartsExpected = 3;
+            nbMaxPartsExpected = 2;
             this.subtype = MANIFEST_ID_WORK_IN_VOLUMEID;
+            break;
+        case "wvo":
+            this.workId = firstId;
+            this.volumeId = secondId;
+            nbMaxPartsExpected = 2;
+            this.subtype = MANIFEST_ID_WORK_IN_VOLUMEID_OUTLINE;
             break;
         default:
             throw new IdentifierException("cannot parse identifier: invalid type \"" + typestr + "\"");
