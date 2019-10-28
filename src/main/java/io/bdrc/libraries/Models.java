@@ -243,7 +243,7 @@ public class Models {
         NAME("name", "NM", BDO + "PersonName"), NOTE("note", "NT", BDO + "Note"), PRODUCT_ORG("productOrg", "PG", ADM + "ProductOrg"),
         TITLE("title", "TT", BDO + "WorkTitle"), VCARD_ADDR("vcardAddr", "VA", VCARD + "Address"), VOLUME("volume", "VL", BDO + "Volume"), 
         WORK_LOC("workLoc", "WL", BDO + "WorkLocation"), MICROFILM("workMicrofilm", "MF", BDO + "ObjectTypeMicrofilm"),
-        CATALOG("catalogLoc", "CT", BDO + "CatalogLocation");
+        CATALOG("catalogLoc", "CT", BDO + "CatalogLocation"), DATE_INDICATION("dateIndication", "DT", BDO + "DateIndication");
 
         private String label;
         private String prefix;
