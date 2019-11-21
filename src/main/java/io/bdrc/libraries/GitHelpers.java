@@ -20,7 +20,6 @@ import org.eclipse.jgit.api.errors.RefNotAdvertisedException;
 import org.eclipse.jgit.api.errors.RefNotFoundException;
 import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
-import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.TextProgressMonitor;
@@ -77,7 +76,7 @@ public class GitHelpers {
     public static Set<String> getChanges(String type) {
         Repository r = typeRepo.get(type);
         if (r == null) {
-            System.out.println("getChanges DID NOT FIND REPO FOR "+type);
+            System.out.println("getChanges DID NOT FIND REPO FOR " + type);
             return null;
         }
         Git git = new Git(r);
@@ -100,12 +99,12 @@ public class GitHelpers {
         Repository r = typeRepo.get(type);
         RevCommit rev = null;
         if (r == null) {
-            System.out.println("commitChanges DID NOT FIND REPO FOR "+type);
+            System.out.println("commitChanges DID NOT FIND REPO FOR " + type);
             return null;
         }
         Git git = new Git(r);
         try {
-            if ( ! git.status().call().isClean() ) {
+            if (!git.status().call().isClean()) {
                 git.add().addFilepattern(".").call();
                 rev = git.commit().setMessage(commitMessage).call();
             }
