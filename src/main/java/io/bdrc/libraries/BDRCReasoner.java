@@ -34,7 +34,7 @@ public class BDRCReasoner {
 
     // true to infer symmetric properties in the same graph (?a :hasBrother ?b -> ?b
     // :hasBrother ?a)
-    public static boolean inferSymetry = false;
+    private static boolean inferSymetry = false;
 
     public static final String BDO = Models.BDO;
 
@@ -53,6 +53,12 @@ public class BDRCReasoner {
         public String toString() {
             return "uri: " + uri + ", parent: " + (parent != null) + ", children: " + children.size() + ", isLeave: " + isLeave + ", ruleToParentDone: " + ruleToParentDone;
         }
+    }
+
+    private static void setSymetry(boolean symetry) {
+        inferSymetry = symetry;
+        // to force new Instance with symetric properties inference
+        INSTANCE = null;
     }
 
     // tag nodes of the tree having all children with ruleToParentDone to isLeave
@@ -123,7 +129,7 @@ public class BDRCReasoner {
         return res;
     }
 
-    public static List<Rule> getRulesFromModel(Model m) {
+    private static List<Rule> getRulesFromModel(Model m) {
         List<Rule> res = new ArrayList<Rule>();
 
         String queryString = "PREFIX bdo: <" + Models.BDO + ">\n" + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" + "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" + "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"
@@ -171,7 +177,7 @@ public class BDRCReasoner {
         return res;
     }
 
-    public static void addRulesFromSource(String source, List<Rule> rules, boolean urlSource) {
+    private static void addRulesFromSource(String source, List<Rule> rules, boolean urlSource) {
         try {
             InputStream rulesFile = null;
             if (urlSource) {
@@ -190,29 +196,27 @@ public class BDRCReasoner {
         }
     }
 
-    public static void addRulesFromFile(String fileName, List<Rule> rules) {
-        ClassLoader classLoader = BDRCReasoner.class.getClassLoader();
-        InputStream rulesFile = classLoader.getResourceAsStream(fileName);
-        try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(rulesFile));
-            Parser p = Rule.rulesParserFromReader(in);
-            rules.addAll(Rule.parseRules(p));
-            rulesFile.close();
-        } catch (ParserException | IOException e) {
-            System.err.println("error parsing " + rulesFile.toString());
-            e.printStackTrace(System.err);
-        }
-    }
-
     public static Reasoner INSTANCE = null;
 
     public static Reasoner getReasoner(Model m) {
+        setSymetry(false);
         if (INSTANCE != null)
             return INSTANCE;
         List<Rule> rules = new ArrayList<Rule>();
-        if (inferSymetry) {
-            addRulesFromSource("https://raw.githubusercontent.com/buda-base/owl-schema/master/reasoning/kinship.rules", rules, true);
-        }
+        rules.addAll(getRulesFromModel(m));
+        rules.addAll(getTaxonomyRules(m));
+        Reasoner reasoner = new GenericRuleReasoner(rules);
+        reasoner.setParameter(ReasonerVocabulary.PROPruleMode, "forward");
+        INSTANCE = reasoner;
+        return reasoner;
+    }
+
+    public static Reasoner getReasonerWithSymetry(Model m) {
+        setSymetry(true);
+        if (INSTANCE != null)
+            return INSTANCE;
+        List<Rule> rules = new ArrayList<Rule>();
+        addRulesFromSource("https://raw.githubusercontent.com/buda-base/owl-schema/master/reasoning/kinship.rules", rules, true);
         rules.addAll(getRulesFromModel(m));
         rules.addAll(getTaxonomyRules(m));
         Reasoner reasoner = new GenericRuleReasoner(rules);
