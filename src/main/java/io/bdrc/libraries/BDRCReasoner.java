@@ -199,7 +199,6 @@ public class BDRCReasoner {
     public static Reasoner INSTANCE = null;
 
     public static Reasoner getReasoner(Model m) {
-        setSymetry(false);
         if (INSTANCE != null)
             return INSTANCE;
         List<Rule> rules = new ArrayList<Rule>();
