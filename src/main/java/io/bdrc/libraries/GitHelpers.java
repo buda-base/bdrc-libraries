@@ -21,12 +21,20 @@ import org.eclipse.jgit.api.errors.RefNotFoundException;
 import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
+import org.eclipse.jgit.internal.storage.file.FileRepository;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.TextProgressMonitor;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevTree;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
 
 public class GitHelpers {
 
@@ -136,6 +144,36 @@ public class GitHelpers {
 
     public static Repository getLocalRepo(String type) {
         return typeRepo.get(type);
+    }
+
+    public static String getGitHeadFileContent(String repo, String filepath) throws IOException {
+        Repository repository = new FileRepository(repo + "/.git");
+        return getGitHeadFileContent(repository, filepath);
+    }
+
+    public static String getGitHeadFileContent(Repository repository, String filepath) throws IOException {
+
+        ObjectId lastCommitId = repository.resolve(Constants.HEAD);
+
+        // a RevWalk allows to walk over commits based on some filtering that is defined
+        RevWalk revWalk = new RevWalk(repository);
+        RevCommit commit = revWalk.parseCommit(lastCommitId);
+        // and using commit's tree find the path
+        RevTree tree = commit.getTree();
+        // now try to find a specific file
+        TreeWalk treeWalk = new TreeWalk(repository);
+        treeWalk.addTree(tree);
+        treeWalk.setRecursive(true);
+        treeWalk.setFilter(PathFilter.create(filepath));
+        if (!treeWalk.next()) {
+            revWalk.close();
+            treeWalk.close();
+            throw new IllegalStateException("Unable to download file.");
+        }
+        ObjectLoader loader = repository.open(treeWalk.getObjectId(0));
+        revWalk.close();
+        treeWalk.close();
+        return new String(loader.getBytes());
     }
 
     public static PullResult pull(String type, String REPOS_BASE_DIR)
