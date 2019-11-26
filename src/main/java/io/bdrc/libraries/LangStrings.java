@@ -348,11 +348,14 @@ public class LangStrings  {
         if (sLen < 2)
             return s;
         int last = s.codePointAt(sLen-1);
-        if (last == 'a' || last == 'i' || last == 'e' || last == 'o')
+        int finalidx = sLen-1;
+        if (last == 'a' || last == 'i' || last == 'e' || last == 'o') {
             last = s.codePointAt(sLen-2);
-        if (sLen > 2 && last == 'g' && s.codePointAt(sLen -3) == 'n')
+            finalidx = sLen-2;
+        }
+        if (sLen > 2 && last == 'g' && s.codePointAt(finalidx-1) == 'n')
             return s+" /";
-        if (last == 'g' || last == 'k' || (sLen == 3 && last == 'h' && s.codePointAt(sLen -3) == 's') || (sLen > 3 && last == 'h' && s.codePointAt(sLen -3) == 's' && s.codePointAt(sLen -4) != 't'))
+        if (last == 'g' || last == 'k' || (sLen == 3 && last == 'h' && s.codePointAt(finalidx-1) == 's') || (sLen > 3 && last == 'h' && s.codePointAt(finalidx-1) == 's' && s.codePointAt(finalidx-2) != 't'))
             return s;
         if (last < 'A' || last > 'z' || (last > 'Z' && last < 'a'))  // string doesn't end with tibetan letter
             return s;

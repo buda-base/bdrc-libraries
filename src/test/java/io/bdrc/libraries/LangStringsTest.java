@@ -63,6 +63,7 @@ public class LangStringsTest
 	public void testEwtsShad() {
 	    assertTrue("bla ma/".equals(addEwtsShad("bla ma")));
 	    assertTrue("ngo /".equals(addEwtsShad("ngo")));
+	    assertTrue("nang /".equals(addEwtsShad("nang")));
 	    assertTrue("nga /".equals(addEwtsShad("nga")));
 	    assertTrue("ngag".equals(addEwtsShad("ngag")));
 	    assertTrue("ga".equals(addEwtsShad("ga")));
