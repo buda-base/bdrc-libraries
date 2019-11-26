@@ -148,13 +148,22 @@ public class GitHelpers {
 
     public static String getGitHeadFileContent(String repo, String filepath) throws IOException {
         Repository repository = new FileRepository(repo + "/.git");
-        return getGitHeadFileContent(repository, filepath);
+        return getGitHeadFileContent(repository, filepath, null);
     }
 
-    public static String getGitHeadFileContent(Repository repository, String filepath) throws IOException {
+    public static String getGitHeadFileContent(String repo, String filepath, String commit) throws IOException {
+        Repository repository = new FileRepository(repo + "/.git");
+        return getGitHeadFileContent(repository, filepath, commit);
+    }
 
-        ObjectId lastCommitId = repository.resolve(Constants.HEAD);
+    public static String getGitHeadFileContent(Repository repository, String filepath, String commitString) throws IOException {
 
+        ObjectId lastCommitId = null;
+        if (commitString == null) {
+            repository.resolve(Constants.HEAD);
+        } else {
+            repository.resolve(commitString);
+        }
         // a RevWalk allows to walk over commits based on some filtering that is defined
         RevWalk revWalk = new RevWalk(repository);
         RevCommit commit = revWalk.parseCommit(lastCommitId);
