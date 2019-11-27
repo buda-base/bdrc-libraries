@@ -160,9 +160,9 @@ public class GitHelpers {
 
         ObjectId lastCommitId = null;
         if (commitString == null) {
-            repository.resolve(Constants.HEAD);
+            lastCommitId = repository.resolve(Constants.HEAD);
         } else {
-            repository.resolve(commitString);
+            lastCommitId = repository.resolve(commitString);
         }
         // a RevWalk allows to walk over commits based on some filtering that is defined
         RevWalk revWalk = new RevWalk(repository);
