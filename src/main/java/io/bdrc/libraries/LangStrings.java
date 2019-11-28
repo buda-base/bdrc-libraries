@@ -340,10 +340,11 @@ public class LangStrings  {
         return res;
     }
 
-    public static String addEwtsShad(final String s) {
+    public static String addEwtsShad(String s) {
         // we suppose that there is no space at the end
         if (s == null)
             return s;
+        s = s.replaceAll("[ _/]+$", "");
         final int sLen = s.length();
         if (sLen < 2)
             return s;
