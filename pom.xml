@@ -4,7 +4,7 @@
   <groupId>io.bdrc.libraries</groupId>
   <artifactId>bdrc-libraries</artifactId>
   <packaging>jar</packaging>
-  <version>0.6.3</version>
+  <version>0.6.4</version>
   <name>bdrc-libraries</name>
   <description>BDRC common tool libraries</description>
   <url>https://github.com/buda-base/bdrc-libraries</url>
@@ -137,6 +137,23 @@
             <artifactId>aws-java-sdk-s3</artifactId>
             <version>1.11.636</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-web</artifactId>
+        <version>5.2.1.RELEASE</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webmvc</artifactId>
+        <version>5.2.1.RELEASE</version>
+    </dependency>    
+    <dependency>
+        <groupId>com.github.jsonld-java</groupId>
+        <artifactId>jsonld-java</artifactId>
+        <version>0.12.5</version>
+    </dependency>    
   </dependencies>
   <profiles>
     <profile>
