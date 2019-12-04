@@ -1,7 +1,5 @@
 package io.bdrc.libraries.formatters;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -75,17 +73,15 @@ public class JSONLDFormatter {
     public final static String oaContext = "http://www.w3.org/ns/oa.jsonld";
     public final static String ldpContext = "http://www.w3.org/ns/ldp.jsonld";
     public static boolean prettyPrint = true;
+    public static final String ANN_PREFIX_SHORT = "bdan";
+    public static final String ANC_PREFIX_SHORT = "bdac";
     public final static JsonLdOptions jsonLdOptions = new JsonLdOptions();
+
     static {
         jsonLdOptions.setProcessingMode("json-ld-1.1");
         jsonLdOptions.setUseNativeTypes(true);
         jsonLdOptions.setCompactArrays(true);
         jsonLdOptions.setPruneBlankNodeIdentifiers(true);
-    }
-    public static final String ANN_PREFIX_SHORT = "bdan";
-    public static final String ANC_PREFIX_SHORT = "bdac";
-
-    static {
         initializeAnnFrameObjects();
     }
 
@@ -192,15 +188,17 @@ public class JSONLDFormatter {
         final Map<String, Object> res = new HashMap<>();
         res.putAll(bdoContextObject);
         Map<String, Map<String, Object>> map = null;
+        ClassLoader classLoader = JSONLDFormatter.class.getClassLoader();
         try {
-            InputStream is = getResourceOrFile("contexts/ldp.jsonld");
+            InputStream is = classLoader.getResourceAsStream("contexts/ldp.jsonld");
             map = mapper.readValue(is, new TypeReference<Map<String, Map<String, Object>>>() {
             });
             res.putAll(map.get("@context"));
-            is = getResourceOrFile("contexts/anno.jsonld");
+            is = classLoader.getResourceAsStream("contexts/anno.jsonld");
             map = mapper.readValue(is, new TypeReference<Map<String, Map<String, Object>>>() {
             });
             res.putAll(map.get("@context"));
+            is.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -213,13 +211,15 @@ public class JSONLDFormatter {
 
     public static Map<String, Object> getOaMergedContext() {
         final Map<String, Object> res = new HashMap<>();
+        ClassLoader classLoader = JSONLDFormatter.class.getClassLoader();
         res.putAll(bdoContextObject);
         Map<String, Map<String, Object>> map = null;
         try {
-            InputStream is = getResourceOrFile("contexts/oa.jsonld");
+            InputStream is = classLoader.getResourceAsStream("contexts/oa.jsonld");
             map = mapper.readValue(is, new TypeReference<Map<String, Map<String, Object>>>() {
             });
             res.putAll(map.get("@context"));
+            is.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -230,23 +230,25 @@ public class JSONLDFormatter {
 
     private static void initializeAnnFrameObjects() {
         Map<String, Object> res = null;
+        ClassLoader classLoader = JSONLDFormatter.class.getClassLoader();
         try {
-            InputStream is = getResourceOrFile("contexts/annotation_frame.jsonld");
+            InputStream is = classLoader.getResourceAsStream("contexts/annotation_frame.jsonld");
             res = mapper.readValue(is, new TypeReference<Map<String, Object>>() {
             });
             res.put("@context", annContextObject);
             typeToFrameObject.put(DocType.ANN, res);
             typeToFrameObject.put(DocType.OA, res);
-            is = getResourceOrFile("contexts/collection_frame.jsonld");
+            is = classLoader.getResourceAsStream("contexts/collection_frame.jsonld");
             res = mapper.readValue(is, new TypeReference<Map<String, Object>>() {
             });
             res.put("@context", annContextObject);
             typeToFrameObject.put(DocType.ANC, res);
-            is = getResourceOrFile("contexts/page_frame.jsonld");
+            is = classLoader.getResourceAsStream("contexts/page_frame.jsonld");
             res = mapper.readValue(is, new TypeReference<Map<String, Object>>() {
             });
             res.put("@context", annContextObject);
             typeToFrameObject.put(DocType.ANP, res);
+            is.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -396,26 +398,6 @@ public class JSONLDFormatter {
     public static void writeModelAsCompact(Model m, OutputStream out) {
         Object jsonO = modelToJsonObject(m, null, null, RDFFormat.JSONLD_COMPACT_PRETTY, false);
         jsonObjectToOutputStream(jsonO, out);
-    }
-
-    private static InputStream getResourceOrFile(final String baseName) {
-        InputStream stream = null;
-        stream = JSONLDFormatter.class.getClassLoader().getResourceAsStream("/" + baseName);
-        if (stream != null) {
-            return stream;
-        }
-        stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("/" + baseName);
-        if (stream != null) {
-            return stream;
-        }
-        final String fileBaseName = "src/main/resources/" + baseName;
-        try {
-            stream = new FileInputStream(fileBaseName);
-            return stream;
-        } catch (FileNotFoundException e) {
-            log.debug("FileNotFound: " + baseName);
-            return null;
-        }
     }
 
 }
