@@ -85,6 +85,7 @@ public class Models {
         typeToRepo.put("SerialMember", BDA + "GR0008");
         
         typeToRepo.put("Instance", BDA + "GR0012");
+        typeToRepo.put("PhysicalInstance", BDA + "GR0012");
         typeToRepo.put("SerialInstance", BDA + "GR0012");
         
         typeToRepo.put("ImageInstance", BDA + "GR0014");
