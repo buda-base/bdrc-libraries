@@ -78,11 +78,19 @@ public class Models {
         typeToRepo.put("Work", BDA + "GR0008");
         typeToRepo.put("AbstractWork", BDA + "GR0008");
         typeToRepo.put("PublishedWork", BDA + "GR0008");
-        typeToRepo.put("SerialWork", BDA + "GR0008");
         typeToRepo.put("UnicodeWork", BDA + "GR0008");
         typeToRepo.put("VirtualWork", BDA + "GR0008");
         typeToRepo.put("UnspecifiedWorkClass", BDA + "GR0008");
-
+        typeToRepo.put("SerialWork", BDA + "GR0008");
+        typeToRepo.put("SerialMember", BDA + "GR0008");
+        
+        typeToRepo.put("Instance", BDA + "GR0012");
+        typeToRepo.put("SerialInstance", BDA + "GR0012");
+        
+        typeToRepo.put("ImageInstance", BDA + "GR0014");
+        
+        typeToRepo.put("EtextInstance", BDA + "GR0013");
+        
         typeToRepo.put("EtextContent", BDA + "GR0009");
         typeToRepo.put("Role", BDA + "GR0010");
         typeToRepo.put("Product", BDA + "GR0011");
