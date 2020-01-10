@@ -4,7 +4,7 @@
   <groupId>io.bdrc.libraries</groupId>
   <artifactId>bdrc-libraries</artifactId>
   <packaging>jar</packaging>
-  <version>0.6.5</version>
+  <version>0.7.0</version>
   <name>bdrc-libraries</name>
   <description>BDRC common tool libraries</description>
   <url>https://github.com/buda-base/bdrc-libraries</url>
@@ -153,7 +153,13 @@
         <groupId>com.github.jsonld-java</groupId>
         <artifactId>jsonld-java</artifactId>
         <version>0.12.5</version>
-    </dependency>    
+    </dependency> 
+    <!-- Email stuff -->
+    <dependency>
+        <groupId>net.sargue</groupId>
+        <artifactId>mailgun</artifactId>
+        <version>1.9.0</version>
+        </dependency>   
   </dependencies>
   <profiles>
     <profile>

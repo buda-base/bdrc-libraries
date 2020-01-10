@@ -157,7 +157,6 @@ public class GitHelpers {
     }
 
     public static String getGitHeadFileContent(Repository repository, String filepath, String commitString) throws IOException {
-
         ObjectId lastCommitId = null;
         if (commitString == null) {
             lastCommitId = repository.resolve(Constants.HEAD);
@@ -166,6 +165,8 @@ public class GitHelpers {
         }
         // a RevWalk allows to walk over commits based on some filtering that is defined
         RevWalk revWalk = new RevWalk(repository);
+        System.out.println("REVWALK >>" + revWalk);
+        System.out.println("COMMIT ID >>" + lastCommitId);
         RevCommit commit = revWalk.parseCommit(lastCommitId);
         // and using commit's tree find the path
         RevTree tree = commit.getTree();
@@ -216,6 +217,10 @@ public class GitHelpers {
         Iterable<PushResult> res = git.push().setCredentialsProvider(new UsernamePasswordCredentialsProvider(user, pass)).setRemote(REMOTE_BASE_URL + type + "s").call();
         git.close();
         return res;
+    }
+
+    public static void main(String[] args) throws IOException {
+        System.out.println(getGitHeadFileContent("/etc/buda/editserv/users/", "99/U1417245714.trig"));
     }
 
 }
