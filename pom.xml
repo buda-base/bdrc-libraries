@@ -156,10 +156,10 @@
     </dependency> 
     <!-- Email stuff -->
     <dependency>
-        <groupId>net.sargue</groupId>
-        <artifactId>mailgun</artifactId>
-        <version>1.9.0</version>
-        </dependency>   
+        <groupId>com.sun.mail</groupId>
+        <artifactId>javax.mail</artifactId>
+        <version>1.6.2</version>
+    </dependency>  
   </dependencies>
   <profiles>
     <profile>
