@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.jena.ontology.OntDocumentManager;
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -210,6 +213,19 @@ public class BDRCReasoner {
         return reasoner;
     }
 
+    public static Reasoner getReasoner() {
+        Model m = getOntologyModel();
+        if (INSTANCE != null)
+            return INSTANCE;
+        List<Rule> rules = new ArrayList<Rule>();
+        rules.addAll(getRulesFromModel(m));
+        rules.addAll(getTaxonomyRules(m));
+        Reasoner reasoner = new GenericRuleReasoner(rules);
+        reasoner.setParameter(ReasonerVocabulary.PROPruleMode, "forward");
+        INSTANCE = reasoner;
+        return reasoner;
+    }
+
     public static Reasoner getReasonerWithSymetry(Model m) {
         setSymetry(true);
         if (INSTANCE != null)
@@ -222,6 +238,32 @@ public class BDRCReasoner {
         reasoner.setParameter(ReasonerVocabulary.PROPruleMode, "forward");
         INSTANCE = reasoner;
         return reasoner;
+    }
+
+    public static Reasoner getReasonerWithSymetry() {
+        Model m = getOntologyModel();
+        setSymetry(true);
+        if (INSTANCE != null)
+            return INSTANCE;
+        List<Rule> rules = new ArrayList<Rule>();
+        addRulesFromSource("https://raw.githubusercontent.com/buda-base/owl-schema/master/reasoning/kinship.rules", rules, true);
+        rules.addAll(getRulesFromModel(m));
+        rules.addAll(getTaxonomyRules(m));
+        Reasoner reasoner = new GenericRuleReasoner(rules);
+        reasoner.setParameter(ReasonerVocabulary.PROPruleMode, "forward");
+        INSTANCE = reasoner;
+        return reasoner;
+    }
+
+    public static OntModel getOntologyModel() {
+        OntDocumentManager ontManager = new OntDocumentManager("owl-schema/ont-policy.rdf;https://raw.githubusercontent.com/buda-base/owl-schema/master/ont-policy.rdf");
+        // not really needed since ont-policy sets it, but what if someone changes the
+        // policy
+        ontManager.setProcessImports(true);
+        OntModelSpec ontSpec = new OntModelSpec(OntModelSpec.OWL_DL_MEM);
+        ontSpec.setDocumentManager(ontManager);
+        OntModel ontModel = ontManager.getOntology("http://purl.bdrc.io/ontology/admin/", ontSpec);
+        return ontModel;
     }
 
 }

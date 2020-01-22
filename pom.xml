@@ -85,7 +85,13 @@
           <groupId>com.github.jsonld-java</groupId>
         </exclusion>
       </exclusions>
-    </dependency>    
+    </dependency> 
+    <!-- https://mvnrepository.com/artifact/org.apache.jena/jena-rdfconnection -->
+    <dependency>
+      <groupId>org.apache.jena</groupId>
+      <artifactId>jena-rdfconnection</artifactId>
+      <version>${jena.version}</version>
+    </dependency>   
     <dependency>
       <groupId>io.bdrc</groupId>
       <artifactId>jena-stable-turtle</artifactId>

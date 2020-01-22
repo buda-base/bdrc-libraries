@@ -107,7 +107,6 @@ public class GitHelpers {
         Repository r = typeRepo.get(type);
         RevCommit rev = null;
         if (r == null) {
-            System.out.println("commitChanges DID NOT FIND REPO FOR " + type);
             return null;
         }
         Git git = new Git(r);
@@ -165,8 +164,6 @@ public class GitHelpers {
         }
         // a RevWalk allows to walk over commits based on some filtering that is defined
         RevWalk revWalk = new RevWalk(repository);
-        System.out.println("REVWALK >>" + revWalk);
-        System.out.println("COMMIT ID >>" + lastCommitId);
         RevCommit commit = revWalk.parseCommit(lastCommitId);
         // and using commit's tree find the path
         RevTree tree = commit.getTree();
