@@ -78,6 +78,7 @@ public class SparqlCommons {
 				return m;
 			}
 		}
+		m.add(stt);
 		return m;
 	}
 
@@ -93,6 +94,7 @@ public class SparqlCommons {
 				return m;
 			}
 		}
+		m.add(stt);
 		return m;
 	}
 
