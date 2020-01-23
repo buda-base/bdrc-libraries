@@ -1,7 +1,6 @@
 package io.bdrc.libraries;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,14 +14,15 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.ResIterator;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.rdfconnection.RDFConnection;
 import org.apache.jena.rdfconnection.RDFConnectionFactory;
 import org.apache.jena.reasoner.Reasoner;
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
 
 public class SparqlCommons {
 
@@ -44,6 +44,25 @@ public class SparqlCommons {
 			}
 			list.add(qs.get("?g").asResource().getURI());
 			map.put(rep, list);
+		}
+		return map;
+	}
+
+	public static HashMap<String, String> getGitReposforGraphs(ArrayList<String> graphUris, String fusekiUrl) {
+		HashMap<String, String> map = new HashMap<>();
+		String query = "select ?g ?rep\n" + "where{" + "	?ad adm:graphId ?g ." + "    ?ad adm:gitRepo ?rep " + " values ?g { ";
+		for (String uri : graphUris) {
+			query = query + " <" + uri + "> ";
+		}
+		query = query + " } }";
+		System.out.println(query);
+		final Query q = QueryFactory.create(Prefixes.getPrefixesString() + query);
+
+		final QueryExecution qe = QueryExecutionFactory.sparqlService(fusekiUrl, q);
+		ResultSet rs = qe.execSelect();
+		while (rs.hasNext()) {
+			QuerySolution qs = rs.next();
+			map.put(qs.get("?g").asResource().getURI(), qs.get("?rep").asResource().getURI());
 		}
 		return map;
 	}
@@ -98,15 +117,37 @@ public class SparqlCommons {
 		return m;
 	}
 
+	public static Model addResourceValueForPropInGraph(Model m, Property p, Resource ro) {
+		ResIterator it = m.listResourcesWithProperty(p);
+		while (it.hasNext()) {
+			Resource rs = it.next();
+			Statement stt = ResourceFactory.createStatement(rs, p, ro);
+			m.add(stt);
+		}
+		return m;
+	}
+
 	public static void main(String[] args) throws IOException {
-		System.out.println(getGraphsForResourceByGitRepos("http://purl.bdrc.io/resource/P1487", "http://buda1.bdrc.io:13180/fuseki/testrw/query"));
-		Dataset ds = DatasetFactory.create();
-		RDFDataMgr.read(ds, new StringReader(GitHelpers.getGitHeadFileContent("/etc/buda/share/gitData/persons", "c7/P1585.trig")), "", Lang.TRIG);
-		Reasoner reasoner = BDRCReasoner.getReasoner();
-		Model to_update = ModelFactory.createModelForGraph(ds.asDatasetGraph().getUnionGraph());
-		Model m = replaceRefInModel(to_update, "http://purl.bdrc.io/graph/P1585", "http://purl.bdrc.io/resource/P1584",
-				"http://purl.bdrc.io/resource/PPP1584", reasoner);
-		m.write(System.out, "TURTLE");
+		/*
+		 * System.out.println(getGraphsForResourceByGitRepos(
+		 * "http://purl.bdrc.io/resource/P1487",
+		 * "http://buda1.bdrc.io:13180/fuseki/testrw/query")); Dataset ds =
+		 * DatasetFactory.create(); RDFDataMgr.read(ds, new
+		 * StringReader(GitHelpers.getGitHeadFileContent(
+		 * "/etc/buda/share/gitData/persons", "c7/P1585.trig")), "", Lang.TRIG);
+		 * Reasoner reasoner = BDRCReasoner.getReasoner(); Model to_update =
+		 * ModelFactory.createModelForGraph(ds.asDatasetGraph().getUnionGraph()); Model
+		 * m = replaceRefInModel(to_update, "http://purl.bdrc.io/graph/P1585",
+		 * "http://purl.bdrc.io/resource/P1584", "http://purl.bdrc.io/resource/PPP1584",
+		 * reasoner); m.write(System.out, "TURTLE");
+		 */
+
+		ArrayList<String> uris = new ArrayList<>();
+		uris.add("http://purl.bdrc.io/graph/P1585");
+		uris.add("http://purl.bdrc.io/graph/W22703");
+		uris.add("http://purl.bdrc.io/graph/T2423");
+		System.out.println(getGitReposforGraphs(uris, "http://buda1.bdrc.io:13180/fuseki/testrw/query"));
+
 	}
 
 }
