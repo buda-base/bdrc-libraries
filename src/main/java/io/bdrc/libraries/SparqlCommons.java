@@ -81,6 +81,21 @@ public class SparqlCommons {
 		return m;
 	}
 
+	public static Model setGitRevision(Model m, String adminGraphUri, String revNumber) {
+		StmtIterator stmt = m.listStatements();
+		Statement stt = ResourceFactory.createStatement(ResourceFactory.createResource(adminGraphUri),
+				ResourceFactory.createProperty(Models.GIT_REVISION), ResourceFactory.createPlainLiteral(revNumber));
+		while (stmt.hasNext()) {
+			Statement st = stmt.next();
+			if (st.getPredicate().equals(ResourceFactory.createProperty(Models.GIT_REVISION))) {
+				m.remove(st);
+				m.add(stt);
+				return m;
+			}
+		}
+		return m;
+	}
+
 	public static void main(String[] args) throws IOException {
 		System.out.println(getGraphsForResourceByGitRepos("http://purl.bdrc.io/resource/P1487", "http://buda1.bdrc.io:13180/fuseki/testrw/query"));
 		Dataset ds = DatasetFactory.create();

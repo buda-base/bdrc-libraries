@@ -29,6 +29,7 @@ public class Models {
 
 	public static String STATUS_PROP = "http://purl.bdrc.io/ontology/admin/status";
 	public static String STATUS_WITHDRAWN = "http://purl.bdrc.io/admindata/StatusWithdrawn";
+	public static String GIT_REVISION = "http://purl.bdrc.io/admindata/gitRevision";
 
 	public static final String BDO = "http://purl.bdrc.io/ontology/core/";
 	public static final String ADM = "http://purl.bdrc.io/ontology/admin/";
