@@ -170,6 +170,22 @@ public class SparqlCommons {
 		return m;
 	}
 
+	public static Model addLiteralValueForPropInGraph(Model m, Property p, String value, String lang) {
+		Literal l = null;
+		if (lang != null) {
+			l = ResourceFactory.createLangLiteral(value, lang);
+		} else {
+			l = ResourceFactory.createPlainLiteral(value);
+		}
+		ResIterator it = m.listResourcesWithProperty(p);
+		while (it.hasNext()) {
+			Resource rs = it.next();
+			Statement stt = ResourceFactory.createStatement(rs, p, l);
+			m.add(stt);
+		}
+		return m;
+	}
+
 	public static void main(String[] args) throws IOException {
 		/*
 		 * System.out.println(getGraphsForResourceByGitRepos(
