@@ -12,6 +12,7 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
@@ -48,8 +49,8 @@ public class SparqlCommons {
 		return map;
 	}
 
-	public static HashMap<String, String> getGitReposforGraphs(ArrayList<String> graphUris, String fusekiUrl) {
-		HashMap<String, String> map = new HashMap<>();
+	public static HashMap<String, ArrayList<String>> getGraphsByGitRepos(ArrayList<String> graphUris, String fusekiUrl) {
+		HashMap<String, ArrayList<String>> map = new HashMap<>();
 		String query = "select ?g ?rep\n" + "where{" + "	?ad adm:graphId ?g ." + "    ?ad adm:gitRepo ?rep " + " values ?g { ";
 		for (String uri : graphUris) {
 			query = query + " <" + uri + "> ";
@@ -62,7 +63,13 @@ public class SparqlCommons {
 		ResultSet rs = qe.execSelect();
 		while (rs.hasNext()) {
 			QuerySolution qs = rs.next();
-			map.put(qs.get("?g").asResource().getURI(), qs.get("?rep").asResource().getURI());
+			String rep = qs.get("?rep").asResource().getURI();
+			ArrayList<String> uris = map.get(rep);
+			if (uris == null) {
+				uris = new ArrayList<>();
+			}
+			uris.add(qs.get("?g").asResource().getURI());
+			map.put(rep, uris);
 		}
 		return map;
 	}
@@ -85,13 +92,49 @@ public class SparqlCommons {
 		return m;
 	}
 
-	public static Model setAdminStatus(Model m, String adminGraphUri, String statusUri) {
+	public static Model setStatusWithDrawn(Model m, String adminGraphUri, String statusUri) {
 		StmtIterator stmt = m.listStatements();
 		Statement stt = ResourceFactory.createStatement(ResourceFactory.createResource(adminGraphUri),
 				ResourceFactory.createProperty(Models.STATUS_PROP), ResourceFactory.createResource(Models.STATUS_WITHDRAWN));
 		while (stmt.hasNext()) {
 			Statement st = stmt.next();
 			if (st.getPredicate().equals(ResourceFactory.createProperty(Models.STATUS_PROP))) {
+				m.remove(st);
+				m.add(stt);
+				return m;
+			}
+		}
+		m.add(stt);
+		return m;
+	}
+
+	public static Model setPropValue(Model m, String adminGraphUri, Property p, Resource value) {
+		StmtIterator stmt = m.listStatements();
+		Statement stt = ResourceFactory.createStatement(ResourceFactory.createResource(adminGraphUri), p, value);
+		while (stmt.hasNext()) {
+			Statement st = stmt.next();
+			if (st.getPredicate().equals(p)) {
+				m.remove(st);
+				m.add(stt);
+				return m;
+			}
+		}
+		m.add(stt);
+		return m;
+	}
+
+	public static Model setLiteralPropValue(Model m, String adminGraphUri, Property p, String value, String lang) {
+		StmtIterator stmt = m.listStatements();
+		Literal l = null;
+		if (lang != null) {
+			l = ResourceFactory.createLangLiteral(value, lang);
+		} else {
+			l = ResourceFactory.createPlainLiteral(value);
+		}
+		Statement stt = ResourceFactory.createStatement(ResourceFactory.createResource(adminGraphUri), p, l);
+		while (stmt.hasNext()) {
+			Statement st = stmt.next();
+			if (st.getPredicate().equals(p)) {
 				m.remove(st);
 				m.add(stt);
 				return m;
@@ -143,10 +186,11 @@ public class SparqlCommons {
 		 */
 
 		ArrayList<String> uris = new ArrayList<>();
+		uris.add("http://purl.bdrc.io/graph/P1583");
 		uris.add("http://purl.bdrc.io/graph/P1585");
 		uris.add("http://purl.bdrc.io/graph/W22703");
 		uris.add("http://purl.bdrc.io/graph/T2423");
-		System.out.println(getGitReposforGraphs(uris, "http://buda1.bdrc.io:13180/fuseki/testrw/query"));
+		System.out.println(getGraphsByGitRepos(uris, "http://buda1.bdrc.io:13180/fuseki/testrw/query"));
 
 	}
 
