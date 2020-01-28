@@ -47,7 +47,7 @@ public class Models {
 
 	public static MessageDigest md5;
 	private static final int hashNbChars = 2;
-	private static final int nbShaChars = 12;
+	private static final int nbShaChars = 16;
 
 	static {
 		try {
