@@ -2,7 +2,10 @@ package io.bdrc.libraries;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
@@ -26,6 +29,20 @@ import org.apache.jena.rdfconnection.RDFConnectionFactory;
 import org.apache.jena.reasoner.Reasoner;
 
 public class SparqlCommons {
+
+	// validate the list of result vars of a select query against a desired set
+	public static boolean validateResultVars(Query q, ArrayList<String> expectedVars) {
+		Collections.sort(expectedVars);
+		List<String> vars = q.getResultVars();
+		Collections.sort(vars);
+		return expectedVars.equals(vars);
+	}
+
+	// validate the list of result vars of a select query against a desired set
+	public static boolean validateResultVars(String query, ArrayList<String> expectedVars) {
+		Query q = QueryFactory.create(Prefixes.getPrefixesString() + query);
+		return validateResultVars(q, expectedVars);
+	}
 
 	public static HashMap<String, ArrayList<String>> getGraphsForResourceByGitRepos(String resUri, String fusekiUrl) {
 		HashMap<String, ArrayList<String>> map = new HashMap<>();
@@ -56,6 +73,50 @@ public class SparqlCommons {
 			query = query + " <" + uri + "> ";
 		}
 		query = query + " } }";
+		System.out.println(query);
+		final Query q = QueryFactory.create(Prefixes.getPrefixesString() + query);
+
+		final QueryExecution qe = QueryExecutionFactory.sparqlService(fusekiUrl, q);
+		ResultSet rs = qe.execSelect();
+		while (rs.hasNext()) {
+			QuerySolution qs = rs.next();
+			String rep = qs.get("?rep").asResource().getURI();
+			ArrayList<String> uris = map.get(rep);
+			if (uris == null) {
+				uris = new ArrayList<>();
+			}
+			uris.add(qs.get("?g").asResource().getURI());
+			map.put(rep, uris);
+		}
+		return map;
+	}
+
+	public static HashMap<String, ArrayList<String>> getGraphsByGitRepos(String query, String fusekiUrl) {
+		HashMap<String, ArrayList<String>> map = new HashMap<>();
+		final Query q = QueryFactory.create(Prefixes.getPrefixesString() + query);
+		ArrayList<String> vars = new ArrayList<>(Arrays.asList("g", "rep"));
+		if (!validateResultVars(q, vars)) {
+			return map;
+		}
+		final QueryExecution qe = QueryExecutionFactory.sparqlService(fusekiUrl, q);
+		ResultSet rs = qe.execSelect();
+		while (rs.hasNext()) {
+			QuerySolution qs = rs.next();
+			String rep = qs.get("?rep").asResource().getURI();
+			ArrayList<String> uris = map.get(rep);
+			if (uris == null) {
+				uris = new ArrayList<>();
+			}
+			uris.add(qs.get("?g").asResource().getURI());
+			map.put(rep, uris);
+		}
+		return map;
+	}
+
+	public static HashMap<String, ArrayList<String>> getGraphsByGitReposHavingProp(ArrayList<String> graphUris, String propUri, String fusekiUrl) {
+		HashMap<String, ArrayList<String>> map = new HashMap<>();
+		String query = "select distinct ?g ?rep " + "where { " + "  graph ?g {?s <" + propUri + "> ?o .} " + "  ?ad adm:graphId ?g . "
+				+ "  ?ad adm:gitRepo ?rep " + "}";
 		System.out.println(query);
 		final Query q = QueryFactory.create(Prefixes.getPrefixesString() + query);
 
@@ -186,6 +247,19 @@ public class SparqlCommons {
 		return m;
 	}
 
+	public static Model renamePropInGraph(Model m, Property oldProp, Property newProp) {
+		StmtIterator stmt = m.listStatements();
+		while (stmt.hasNext()) {
+			Statement st = stmt.next();
+			if (st.getPredicate().equals(oldProp)) {
+				m.remove(st);
+				Statement stt = ResourceFactory.createStatement(st.getSubject(), newProp, st.getObject());
+				m.add(stt);
+			}
+		}
+		return m;
+	}
+
 	public static void main(String[] args) throws IOException {
 		/*
 		 * System.out.println(getGraphsForResourceByGitRepos(
@@ -208,6 +282,9 @@ public class SparqlCommons {
 		uris.add("http://purl.bdrc.io/graph/T2423");
 		System.out.println(getGraphsByGitRepos(uris, "http://buda1.bdrc.io:13180/fuseki/testrw/query"));
 
+		String q = "select ?g ?rep\n"
+				+ "where{	?ad adm:graphId ?g .    ?ad adm:gitRepo ?rep  values ?g {  <http://purl.bdrc.io/graph/P1583>  <http://purl.bdrc.io/graph/P1585>  <http://purl.bdrc.io/graph/W22703>  <http://purl.bdrc.io/graph/T2423>  } }\n";
+		getGraphsByGitRepos(q, "http://buda1.bdrc.io:13180/fuseki/testrw/query");
 	}
 
 }
