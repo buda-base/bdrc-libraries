@@ -234,6 +234,14 @@ public class GitHelpers {
         return res;
     }
 
+    public static PullResult pull(Repository r) throws WrongRepositoryStateException, InvalidConfigurationException, InvalidRemoteException,
+            CanceledException, RefNotFoundException, RefNotAdvertisedException, NoHeadException, TransportException, GitAPIException {
+        Git git = new Git(r);
+        PullResult res = git.pull().setProgressMonitor(new TextProgressMonitor()).setRemote("origin").call();
+        git.close();
+        return res;
+    }
+
     public static String pull(String type) throws GitAPIException {
         Repository r = typeRepo.get(type);
         Git git = new Git(r);
