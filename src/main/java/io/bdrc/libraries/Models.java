@@ -254,7 +254,7 @@ public class Models {
 		HOLDER("lineageHolder", "LH", BDO + "LineageHolder"), LINEAGE_HOLDER("lineageHolder", "LH", BDO + "LineageHolder"),
 		LOG_ENTRY("logEntry", "LG", ADM + "LogEntry"), NAME("name", "NM", BDO + "PersonName"), NOTE("note", "NT", BDO + "Note"),
 		PRODUCT_ORG("productOrg", "PG", ADM + "ProductOrg"), TITLE("title", "TT", BDO + "WorkTitle"),
-		VCARD_ADDR("vcardAddr", "VA", VCARD + "Address"), VOLUME("volume", "VL", BDO + "Volume"), WORK_LOC("workLoc", "WL", BDO + "WorkLocation"),
+		VCARD_ADDR("vcardAddr", "VA", VCARD + "Address"), VOLUME("volume", "VL", BDO + "Volume"), CONTENT_LOC("contentLoc", "CL", BDO + "ContentLocation"),
 		MICROFILM("workMicrofilm", "MF", BDO + "ObjectTypeMicrofilm"), CATALOG("catalogLoc", "CT", BDO + "CatalogLocation"),
 		DATE_INDICATION("dateIndication", "DT", BDO + "DateIndication");
 
