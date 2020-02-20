@@ -43,7 +43,7 @@ public class GlobalHelpers {
         predicatesPrio.add(BDO + "notBefore");
         predicatesPrio.add(BDO + "notAfter");
         predicatesPrio.add(BDO + "noteText");
-        predicatesPrio.add(BDO + "noteWork");
+        predicatesPrio.add(BDO + "noteSource");
         predicatesPrio.add(BDO + "noteLocationStatement");
         predicatesPrio.add(BDO + "volumeNumber");
         predicatesPrio.add(BDO + "eventWho");

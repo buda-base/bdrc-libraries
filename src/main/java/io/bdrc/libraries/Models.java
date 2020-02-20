@@ -91,6 +91,9 @@ public class Models {
 		typeToRepo.put("Instance", BDA + "GR0012");
 		typeToRepo.put("PhysicalInstance", BDA + "GR0012");
 		typeToRepo.put("SerialInstance", BDA + "GR0012");
+		typeToRepo.put("VirtualInstance", BDA + "GR0012");
+		typeToRepo.put("SingletonInstance", BDA + "GR0012");
+		typeToRepo.put("BundleInstance", BDA + "GR0012");
 
 		typeToRepo.put("ImageInstance", BDA + "GR0014");
 
@@ -256,7 +259,7 @@ public class Models {
 		PRODUCT_ORG("productOrg", "PG", ADM + "ProductOrg"), TITLE("title", "TT", BDO + "WorkTitle"),
 		VCARD_ADDR("vcardAddr", "VA", VCARD + "Address"), VOLUME("volume", "VL", BDO + "Volume"), CONTENT_LOC("contentLoc", "CL", BDO + "ContentLocation"),
 		MICROFILM("workMicrofilm", "MF", BDO + "ObjectTypeMicrofilm"), CATALOG("catalogLoc", "CT", BDO + "CatalogLocation"),
-		DATE_INDICATION("dateIndication", "DT", BDO + "DateIndication");
+		DATE_INDICATION("dateIndication", "DT", BDO + "DateIndication"), IDENTIFIER("identifier", "ID", BDO+"Identifier");
 
 		private String label;
 		private String prefix;
