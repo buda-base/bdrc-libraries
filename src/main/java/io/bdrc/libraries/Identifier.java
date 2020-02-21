@@ -19,24 +19,53 @@ public class Identifier {
     public static final int MANIFEST_ID_WORK_IN_VOLUMEID = 6;
     public static final int MANIFEST_ID_VOLUMEID_OUTLINE = 8;
     public static final int MANIFEST_ID_WORK_IN_VOLUMEID_OUTLINE = 10;
+    
+    final static int INSTANCE_ID = 100;
+    final static int IMAGEINSTANCE_ID = 101;
+    final static int IMAGEGROUP_ID = 102;
 
+    public final static int RANGE_NORANGE = 0;
+    public final static int RANGE_PAGENUM = 1;
+    public final static int RANGE_PAGEFILENAME = 2;
+    
     @JsonProperty("id")
     String id = null;
     @JsonProperty("type")
     int type = -1;
     @JsonProperty("subtype")
     int subtype = -1;
-    @JsonProperty("workId")
-    String workId = null;
-    @JsonProperty("itemId")
-    String itemId = null;
-    @JsonProperty("volumeId")
-    String volumeId = null;
+    @JsonProperty("instanceId")
+    String instanceId = null;
+    @JsonProperty("imageInstanceId")
+    String imageInstanceId = null;
+    @JsonProperty("imageGroupId")
+    String imageGroupId = null;
+    @JsonProperty("pageRangeType")
+    Integer pageRangeType = null;
     @JsonProperty("bPageNum")
     Integer bPageNum = null;
     @JsonProperty("ePageNum")
     Integer ePageNum = null;
+    @JsonProperty("bPageFileName")
+    Integer bPageFileName = null;
+    @JsonProperty("ePageFileName")
+    Integer ePageFileName = null;
 
+    public String transitionToNew(String requestedId, final int type) {
+        if (type == INSTANCE_ID) {
+            if (requestedId.startsWith("bdr:W"))
+                return "bdr:MW"+requestedId.substring(5);
+        } else if (type == IMAGEINSTANCE_ID) {
+            if (requestedId.startsWith("bdr:I"))
+                return "bdr:W"+requestedId.substring(5);
+        } else if (requestedId.startsWith("bdr:V")) {
+                int uIidx = requestedId.lastIndexOf("_I");
+                if (uIidx != -1)
+                    return "bdr:"+requestedId.substring(uIidx + 1);
+        }
+        return requestedId;
+    }
+    
     public void setPageNumFromIdPart(final String idPart) throws IdentifierException {
         if (idPart == null || idPart.isEmpty())
             return;
@@ -85,24 +114,24 @@ public class Identifier {
         if (idType == COLLECTION_ID) {
             switch (typestr) {
             case "i":
-                this.itemId = firstId;
+                this.imageInstanceId = transitionToNew(firstId, IMAGEINSTANCE_ID);
                 nbMaxPartsExpected = 1;
                 this.subtype = COLLECTION_ID_ITEM;
                 break;
             case "ivo":
-                this.itemId = firstId;
+                this.imageInstanceId = transitionToNew(firstId, IMAGEINSTANCE_ID);
                 nbMaxPartsExpected = 1;
                 this.subtype = COLLECTION_ID_ITEM_VOLUME_OUTLINE;
                 break;
             case "wi":
-                this.workId = firstId;
-                this.itemId = secondId;
+                this.instanceId = transitionToNew(firstId, INSTANCE_ID);
+                this.imageInstanceId = transitionToNew(secondId, IMAGEINSTANCE_ID);
                 nbMaxPartsExpected = 2;
                 this.subtype = COLLECTION_ID_WORK_IN_ITEM;
                 break;
             case "wio":
-                this.workId = firstId;
-                this.itemId = secondId;
+                this.instanceId = transitionToNew(firstId, INSTANCE_ID);
+                this.imageInstanceId = transitionToNew(secondId, IMAGEINSTANCE_ID);
                 nbMaxPartsExpected = 2;
                 this.subtype = COLLECTION_ID_WORK_OUTLINE;
                 break;
@@ -114,32 +143,32 @@ public class Identifier {
         // idType == MANIFEST_ID
         switch (typestr) {
         case "wi":
-            this.workId = firstId;
-            this.itemId = secondId;
+            this.instanceId = transitionToNew(firstId, INSTANCE_ID);
+            this.imageInstanceId = transitionToNew(secondId, IMAGEINSTANCE_ID);
             setPageNumFromIdPart(thirdId);
             nbMaxPartsExpected = 3;
             this.subtype = MANIFEST_ID_WORK_IN_ITEM;
             break;
         case "v":
-            this.volumeId = firstId;
+            this.imageGroupId = transitionToNew(firstId, IMAGEGROUP_ID);
             setPageNumFromIdPart(secondId);
             nbMaxPartsExpected = 2;
             this.subtype = MANIFEST_ID_VOLUMEID;
             break;
         case "vo":
-            this.volumeId = firstId;
+            this.imageGroupId = transitionToNew(firstId, IMAGEGROUP_ID);
             nbMaxPartsExpected = 1;
             this.subtype = MANIFEST_ID_VOLUMEID_OUTLINE;
             break;
         case "wv":
-            this.workId = firstId;
-            this.volumeId = secondId;
+            this.instanceId = transitionToNew(firstId, INSTANCE_ID);
+            this.imageGroupId = transitionToNew(secondId, IMAGEGROUP_ID);
             nbMaxPartsExpected = 2;
             this.subtype = MANIFEST_ID_WORK_IN_VOLUMEID;
             break;
         case "wvo":
-            this.workId = firstId;
-            this.volumeId = secondId;
+            this.instanceId = transitionToNew(firstId, INSTANCE_ID);
+            this.imageGroupId = transitionToNew(secondId, IMAGEGROUP_ID);;
             nbMaxPartsExpected = 2;
             this.subtype = MANIFEST_ID_WORK_IN_VOLUMEID_OUTLINE;
             break;
@@ -148,7 +177,7 @@ public class Identifier {
         }
         if (nbMaxPartsExpected < parts.length)
             throw new IdentifierException("cannot parse identifier: not enough parts");
-        if (!isWellFormedId(workId) || !isWellFormedId(itemId) || !isWellFormedId(volumeId))
+        if (!isWellFormedId(instanceId) || !isWellFormedId(imageInstanceId) || !isWellFormedId(imageGroupId))
             throw new IdentifierException("cannot parse identifier: ill formed IDs");
     }
 
@@ -160,16 +189,16 @@ public class Identifier {
         return subtype;
     }
 
-    public String getItemId() {
-        return itemId;
+    public String getImageInstanceId() {
+        return imageInstanceId;
     }
 
-    public String getVolumeId() {
-        return volumeId;
+    public String getImageGroupId() {
+        return imageGroupId;
     }
 
-    public String getWorkId() {
-        return workId;
+    public String getInstanceId() {
+        return instanceId;
     }
 
     public String getId() {
@@ -196,7 +225,7 @@ public class Identifier {
 
     @Override
     public String toString() {
-        return "Identifier [id=" + id + ", type=" + type + ", subtype=" + subtype + ", workId=" + workId + ", itemId=" + itemId + ", volumeId=" + volumeId + ", bPageNum=" + bPageNum + ", ePageNum=" + ePageNum + "]";
+        return "Identifier [id=" + id + ", type=" + type + ", subtype=" + subtype + ", instanceId=" + instanceId + ", imageInstanceId=" + imageInstanceId + ", imageGroupId=" + imageGroupId + ", bPageNum=" + bPageNum + ", ePageNum=" + ePageNum + "]";
     }
 
 }
