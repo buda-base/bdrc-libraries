@@ -53,12 +53,12 @@ public class Identifier {
 
     public String transitionToNew(String requestedId, final int type) {
         if (type == INSTANCE_ID) {
-            if (requestedId.startsWith("bdr:W"))
+            if (requestedId != null && requestedId.startsWith("bdr:W"))
                 return "bdr:MW"+requestedId.substring(5);
         } else if (type == IMAGEINSTANCE_ID) {
-            if (requestedId.startsWith("bdr:I"))
+            if (requestedId != null && requestedId.startsWith("bdr:I"))
                 return "bdr:W"+requestedId.substring(5);
-        } else if (requestedId.startsWith("bdr:V")) {
+        } else if (requestedId != null && requestedId.startsWith("bdr:V")) {
                 int uIidx = requestedId.lastIndexOf("_I");
                 if (uIidx != -1)
                     return "bdr:"+requestedId.substring(uIidx + 1);
