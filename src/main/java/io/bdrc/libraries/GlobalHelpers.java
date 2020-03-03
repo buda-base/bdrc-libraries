@@ -23,6 +23,7 @@ import org.apache.jena.sparql.util.Context;
 import org.apache.jena.sparql.util.Symbol;
 import org.apache.jena.vocabulary.SKOS;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.bdrc.jena.sttl.CompareComplex;
@@ -57,8 +58,14 @@ public class GlobalHelpers {
         return ctx;
     }
 
-    public static String getTwoLettersBucket(String st) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("MD5");
+    public static String getTwoLettersBucket(String st) {
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            // this is too stupid to throw
+            return "";
+        }
         md.reset();
         md.update(st.getBytes(Charset.forName("UTF8")));
         return new String(Hex.encodeHex(md.digest())).substring(0, 2);
@@ -82,14 +89,8 @@ public class GlobalHelpers {
         return new String(b, "UTF-8");
     }
 
-    public static byte[] getJsonBytes(Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsBytes(obj);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return new byte[0];
+    public static byte[] getJsonBytes(Object obj) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsBytes(obj);
     }
 
 }
