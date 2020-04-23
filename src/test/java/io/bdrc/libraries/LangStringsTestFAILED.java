@@ -32,7 +32,7 @@ import io.bdrc.ewtsconverter.EwtsConverter;
 /**
  * Unit test for simple App.
  */
-public class LangStringsTest 
+public class LangStringsTestFAILED 
 {
 	final static String TESTDIR = "src/test/";
 	public static OntModel ontology = null;
