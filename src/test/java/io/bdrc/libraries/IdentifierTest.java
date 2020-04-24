@@ -23,5 +23,6 @@ public class IdentifierTest {
         assertTrue(id.instanceId.equals("bdr:MW123"));
         assertTrue(id.imageInstanceId == null);
     }
+
     
 }

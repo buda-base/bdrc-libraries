@@ -72,9 +72,9 @@ public class GitHelpers {
             if (!repository.getObjectDatabase().exists()) {
                 System.out.println("create git repository in " + dirpath);
                 repository.create();
-                PrintWriter out = new PrintWriter(dirpath + ".gitignore");
-                out.println(gitignore);
-                out.close();
+                //PrintWriter out = new PrintWriter(dirpath + "/.gitignore");
+                //out.println(gitignore);
+                //out.close();
             }
             typeRepo.put(type, repository);
         } catch (IOException e) {
@@ -94,9 +94,9 @@ public class GitHelpers {
             if (!repository.getObjectDatabase().exists()) {
                 System.out.println("create git repository in " + REPOS_BASE_DIR);
                 repository.create();
-                PrintWriter out = new PrintWriter(REPOS_BASE_DIR + ".gitignore");
-                out.println(gitignore);
-                out.close();
+                //PrintWriter out = new PrintWriter(REPOS_BASE_DIR + "/.gitignore");
+                //out.println(gitignore);
+                //out.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
