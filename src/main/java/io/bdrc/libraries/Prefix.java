@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.HashMap;
 
 import org.apache.jena.riot.system.PrefixMap;
@@ -14,48 +12,27 @@ import org.apache.jena.shared.PrefixMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Prefixes {
+public class Prefix {
 
-    public final static Logger log = LoggerFactory.getLogger(Prefixes.class);
+    public final static Logger log = LoggerFactory.getLogger(Prefix.class);
     private final static PrefixMap pMap = new PrefixMapStd();
     private final static HashMap<String, String> map = new HashMap<>();
     private static String prefixesString;
     private final static PrefixMapping PREFIXES_MAP = PrefixMapping.Factory.create();
 
-    static {
+    public Prefix(String path) {
         try {
-            loadPrefixes();
+            loadPrefixes(path);
         } catch (IOException ex) {
             log.error("Prefixes initialization error", ex);
         }
     }
 
-    public static String getPrefixesString() {
+    public String getPrefixesString() {
         return prefixesString;
     }
 
-    public static void loadPrefixes() throws IOException {
-        URL url = new URL(System.getProperty("user.dir") + "/lds-queries/public/prefixes.txt");
-        BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-        final StringBuilder sb = new StringBuilder();
-        PREFIXES_MAP.clearNsPrefixMap();
-        pMap.clear();
-        String line = "";
-        while ((line = br.readLine()) != null) {
-            sb.append(line);
-            if (line.length() < 10 || line.startsWith("#"))
-                continue;
-            final String uri = line.substring(line.indexOf('<') + 1, line.indexOf('>'));
-            final String prefix = line.substring(7, line.indexOf(':')).trim();
-            map.put(prefix, uri);
-            pMap.add(prefix, uri);
-            PREFIXES_MAP.setNsPrefix(prefix, uri);
-        }
-        prefixesString = sb.toString();
-        br.close();
-    }
-
-    public static void loadPrefixes(final String filePath) throws IOException {
+    public void loadPrefixes(final String filePath) throws IOException {
         log.info("reading prefixes from {}", filePath);
         final File file = new File(filePath);
         final BufferedReader br = new BufferedReader(new FileReader(file));
@@ -77,33 +54,33 @@ public class Prefixes {
         br.close();
     }
 
-    public static PrefixMap getPrefixMap() {
+    public PrefixMap getPrefixMap() {
         return pMap;
     }
 
-    public static HashMap<String, String> getMap() {
+    public HashMap<String, String> getMap() {
         return map;
     }
 
-    public static PrefixMapping getPrefixMapping() {
+    public PrefixMapping getPrefixMapping() {
         return PREFIXES_MAP;
     }
 
-    public static String getFullIRI(String prefix) {
+    public String getFullIRI(String prefix) {
         if (prefix != null) {
             return PREFIXES_MAP.getNsPrefixURI(prefix);
         }
         return null;
     }
 
-    public static String getPrefix(String IRI) {
+    public String getPrefix(String IRI) {
         if (IRI != null) {
             return PREFIXES_MAP.getNsURIPrefix(IRI);
         }
         return "";
     }
 
-    public static String getPrefixedIRI(String IRI) {
+    public String getPrefixedIRI(String IRI) {
         if (IRI != null) {
             return PREFIXES_MAP.shortForm(IRI);
         }

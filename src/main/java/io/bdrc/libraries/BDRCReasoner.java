@@ -1,6 +1,7 @@
 package io.bdrc.libraries;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -193,8 +194,8 @@ public class BDRCReasoner {
             if (urlSource) {
                 rulesFile = new URL(source).openStream();
             } else {
-                ClassLoader classLoader = BDRCReasoner.class.getClassLoader();
-                rulesFile = classLoader.getResourceAsStream(source);
+
+                rulesFile = new FileInputStream(source);
             }
             BufferedReader in = new BufferedReader(new InputStreamReader(rulesFile));
             Parser p = Rule.rulesParserFromReader(in);
@@ -238,7 +239,7 @@ public class BDRCReasoner {
         if (INSTANCE != null)
             return INSTANCE;
         List<Rule> rules = new ArrayList<Rule>();
-        addRulesFromSource(System.getProperty("user.dir") + "/owl-schema/reasoning/kinship.rules", rules, true);
+        addRulesFromSource(System.getProperty("user.dir") + "/owl-schema/reasoning/kinship.rules", rules, false);
         rules.addAll(getRulesFromModel(m));
         rules.addAll(getTaxonomyRules(m));
         Reasoner reasoner = new GenericRuleReasoner(rules);
@@ -253,7 +254,7 @@ public class BDRCReasoner {
         if (INSTANCE != null)
             return INSTANCE;
         List<Rule> rules = new ArrayList<Rule>();
-        addRulesFromSource("https://raw.githubusercontent.com/buda-base/owl-schema/master/reasoning/kinship.rules", rules, true);
+        addRulesFromSource(System.getProperty("user.dir") + "/owl-schema/reasoning/kinship.rules", rules, false);
         rules.addAll(getRulesFromModel(m));
         rules.addAll(getTaxonomyRules(m));
         Reasoner reasoner = new GenericRuleReasoner(rules);

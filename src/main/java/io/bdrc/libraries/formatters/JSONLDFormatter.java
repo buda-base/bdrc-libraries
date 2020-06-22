@@ -37,8 +37,6 @@ import com.github.jsonldjava.core.JsonLdError;
 import com.github.jsonldjava.core.JsonLdOptions;
 import com.github.jsonldjava.utils.JsonUtils;
 
-import io.bdrc.libraries.Prefixes;
-
 /*******************************************************************************
  * Copyright (c) 2017-2018 Buddhist Digital Resource Center (BDRC)
  *
@@ -66,7 +64,7 @@ public class JSONLDFormatter {
     public static final Map<String, Object> bdoContextObject = getBDOContext();
     public static final Map<String, Object> annContextObject = getAnnMergedContext();
     public static final Map<String, Object> oaContextObject = getOaMergedContext();
-    public static final String BDR = "http://purl.bdrc.io/resource/";
+    // public static final String BDR = "http://purl.bdrc.io/resource/";
     public final static Logger log = LoggerFactory.getLogger(JSONLDFormatter.class);
     public final static String simpleContext = "http://purl.bdrc.io/context.jsonld";
     public final static String annoContext = "http://www.w3.org/ns/anno.jsonld";
@@ -343,20 +341,20 @@ public class JSONLDFormatter {
         return res;
     }
 
-    public static Map<String, Object> modelToJsonObject(final Model m, final String mainResourceUri, DocType type) {
+    public static Map<String, Object> modelToJsonObject(final Model m, final String mainResourceUri, DocType type, PrefixMap pm) {
         if (type == null) {
             type = getDocType(m, mainResourceUri);
             if (type == null) {
                 log.info("not able to determine type of resource {} for frame output, outputting compact", mainResourceUri);
-                return modelToJsonObject(m, null, mainResourceUri, RDFFormat.JSONLD_COMPACT_PRETTY, false);
+                return modelToJsonObject(m, null, mainResourceUri, RDFFormat.JSONLD_COMPACT_PRETTY, false, pm);
             }
         }
-        return modelToJsonObject(m, type, mainResourceUri, RDFFormat.JSONLD_FRAME_PRETTY, false);
+        return modelToJsonObject(m, type, mainResourceUri, RDFFormat.JSONLD_FRAME_PRETTY, false, pm);
     }
 
     @SuppressWarnings("unchecked")
     public static Map<String, Object> modelToJsonObject(final Model m, final DocType type, final String mainResourceUri, RDFFormat format,
-            final boolean reorder) {
+            final boolean reorder, PrefixMap pm) {
         final JsonLDWriteContext ctx = new JsonLDWriteContext();
         if (format.equals(RDFFormat.JSONLD_FRAME_PRETTY) || format.equals(RDFFormat.JSONLD_FRAME_FLAT)) {
             final Object frameObj = getFrameObject(type, mainResourceUri);
@@ -366,7 +364,6 @@ public class JSONLDFormatter {
         ctx.setJsonLDContext(docTypeToContextObject.get(type));
         ctx.setOptions(jsonLdOptions);
         final DatasetGraph g = DatasetFactory.create(m).asDatasetGraph();
-        final PrefixMap pm = Prefixes.getPrefixMap();
         Map<String, Object> tm;
         try {
             tm = (Map<String, Object>) JsonLDWriter.toJsonLDJavaAPI(variant, g, pm, null, ctx);
@@ -396,8 +393,8 @@ public class JSONLDFormatter {
         IO.flush(wr);
     }
 
-    public static void writeModelAsCompact(Model m, OutputStream out) {
-        Object jsonO = modelToJsonObject(m, null, null, RDFFormat.JSONLD_COMPACT_PRETTY, false);
+    public static void writeModelAsCompact(Model m, OutputStream out, PrefixMap pm) {
+        Object jsonO = modelToJsonObject(m, null, null, RDFFormat.JSONLD_COMPACT_PRETTY, false, pm);
         jsonObjectToOutputStream(jsonO, out);
     }
 

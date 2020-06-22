@@ -8,6 +8,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.riot.RDFLanguages;
 import org.apache.jena.riot.RDFWriter;
+import org.apache.jena.riot.system.PrefixMap;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -33,7 +34,7 @@ public class StreamingHelpers {
         return stream;
     }
 
-    public static StreamingResponseBody getModelStream(final Model model, final String format) {
+    public static StreamingResponseBody getModelStream(final Model model, final String format, PrefixMap pm) {
         return new StreamingResponseBody() {
             @Override
             public void writeTo(OutputStream os) {
@@ -42,7 +43,7 @@ public class StreamingHelpers {
                     JenaFormat = "STTL";
                 } else {
                     if (format.equals("jsonld")) {
-                        JSONLDFormatter.writeModelAsCompact(model, os);
+                        JSONLDFormatter.writeModelAsCompact(model, os, pm);
                         return;
                     }
                     JenaFormat = BudaMediaTypes.getJenaFromExtension(format);
@@ -57,13 +58,14 @@ public class StreamingHelpers {
         };
     }
 
-    public static StreamingResponseBody getModelStream(final Model model, final String format, final String res, DocType docType) {
+    public static StreamingResponseBody getModelStream(final Model model, final String format, final String res, DocType docType,
+            PrefixMap prefixes) {
 
         return new StreamingResponseBody() {
             @Override
             public void writeTo(OutputStream os) {
                 if (format.equals("jsonld")) {
-                    Object json = JSONLDFormatter.modelToJsonObject(model, res, docType);
+                    Object json = JSONLDFormatter.modelToJsonObject(model, res, docType, prefixes);
                     JSONLDFormatter.jsonObjectToOutputStream(json, os);
 
                 } else {
@@ -76,7 +78,7 @@ public class StreamingHelpers {
                     if (JenaFormat.contentEquals(RDFLanguages.strLangTriG)) {
                         DatasetGraph dsg = DatasetFactory.create().asDatasetGraph();
                         dsg.addGraph(ResourceFactory.createResource(res).asNode(), model.getGraph());
-                        new STriGWriter().write(os, dsg, Prefixes.getPrefixMap(), "", GlobalHelpers.createWriterContext());
+                        new STriGWriter().write(os, dsg, prefixes, "", GlobalHelpers.createWriterContext());
                         return;
                     }
                     model.write(os, JenaFormat);
