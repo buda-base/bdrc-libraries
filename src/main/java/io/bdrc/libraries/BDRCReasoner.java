@@ -54,7 +54,8 @@ public class BDRCReasoner {
         }
 
         public String toString() {
-            return "uri: " + uri + ", parent: " + (parent != null) + ", children: " + children.size() + ", isLeave: " + isLeave + ", ruleToParentDone: " + ruleToParentDone;
+            return "uri: " + uri + ", parent: " + (parent != null) + ", children: " + children.size() + ", isLeave: " + isLeave
+                    + ", ruleToParentDone: " + ruleToParentDone;
         }
     }
 
@@ -135,12 +136,18 @@ public class BDRCReasoner {
     private static List<Rule> getRulesFromModel(Model m) {
         List<Rule> res = new ArrayList<Rule>();
 
-        String queryString = "PREFIX bdo: <" + Models.BDO + ">\n" + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" + "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" + "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"
-                + "SELECT distinct ?ancestor ?child ?type\n" + "WHERE {\n" + "  {\n" + "     ?child owl:inverseOf ?ancestor .\n" + "     BIND (\"i\" AS ?type)\n" + "  } UNION {\n" + "     ?ancestor a owl:SymmetricProperty .\n"
-                + "     BIND (\"s\" AS ?type).\n" + "     BIND (?ancestor AS ?child)\n" + "  } UNION {\n" + "     ?ancestor bdo:inferSubTree \"true\"^^xsd:boolean .\n" + "     ?child rdfs:subPropertyOf+ ?ancestor .\n" + "     BIND (\"p\" AS ?type)\n"
-                + "  } UNION {\n" + "     ?grandancestor bdo:inferSubTree \"true\"^^xsd:boolean .\n" + "     ?child rdfs:subPropertyOf+ ?ancestor .\n" + "     ?ancestor rdfs:subPropertyOf+ ?grandancestor .\n" + "     BIND (\"p\" AS ?type)\n"
-                + "  } UNION {\n" + "     ?ancestor bdo:inferSubTree \"true\"^^xsd:boolean .\n" + "     ?child rdfs:subClassOf+ ?ancestor .\n" + "     BIND (\"c\" AS ?type)\n" + "  } UNION {\n"
-                + "     ?grandancestor bdo:inferSubTree \"true\"^^xsd:boolean .\n" + "     ?child rdfs:subClassOf+ ?ancestor .\n" + "     ?ancestor rdfs:subClassOf+ ?grandancestor .\n" + "     BIND (\"c\" AS ?type)\n" + "  }\n" + "}\n";
+        String queryString = "PREFIX bdo: <" + Models.BDO + ">\n" + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+                + "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" + "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"
+                + "SELECT distinct ?ancestor ?child ?type\n" + "WHERE {\n" + "  {\n" + "     ?child owl:inverseOf ?ancestor .\n"
+                + "     BIND (\"i\" AS ?type)\n" + "  } UNION {\n" + "     ?ancestor a owl:SymmetricProperty .\n" + "     BIND (\"s\" AS ?type).\n"
+                + "     BIND (?ancestor AS ?child)\n" + "  } UNION {\n" + "     ?ancestor bdo:inferSubTree \"true\"^^xsd:boolean .\n"
+                + "     ?child rdfs:subPropertyOf+ ?ancestor .\n" + "     BIND (\"p\" AS ?type)\n" + "  } UNION {\n"
+                + "     ?grandancestor bdo:inferSubTree \"true\"^^xsd:boolean .\n" + "     ?child rdfs:subPropertyOf+ ?ancestor .\n"
+                + "     ?ancestor rdfs:subPropertyOf+ ?grandancestor .\n" + "     BIND (\"p\" AS ?type)\n" + "  } UNION {\n"
+                + "     ?ancestor bdo:inferSubTree \"true\"^^xsd:boolean .\n" + "     ?child rdfs:subClassOf+ ?ancestor .\n"
+                + "     BIND (\"c\" AS ?type)\n" + "  } UNION {\n" + "     ?grandancestor bdo:inferSubTree \"true\"^^xsd:boolean .\n"
+                + "     ?child rdfs:subClassOf+ ?ancestor .\n" + "     ?ancestor rdfs:subClassOf+ ?grandancestor .\n" + "     BIND (\"c\" AS ?type)\n"
+                + "  }\n" + "}\n";
         Query query = QueryFactory.create(queryString);
         try (QueryExecution qexec = QueryExecutionFactory.create(query, m)) {
             ResultSet results = qexec.execSelect();
@@ -231,7 +238,7 @@ public class BDRCReasoner {
         if (INSTANCE != null)
             return INSTANCE;
         List<Rule> rules = new ArrayList<Rule>();
-        addRulesFromSource("https://raw.githubusercontent.com/buda-base/owl-schema/master/reasoning/kinship.rules", rules, true);
+        addRulesFromSource(System.getProperty("user.dir") + "/owl-schema/reasoning/kinship.rules", rules, true);
         rules.addAll(getRulesFromModel(m));
         rules.addAll(getTaxonomyRules(m));
         Reasoner reasoner = new GenericRuleReasoner(rules);
@@ -256,7 +263,8 @@ public class BDRCReasoner {
     }
 
     public static OntModel getOntologyModel() {
-        OntDocumentManager ontManager = new OntDocumentManager("owl-schema/ont-policy.rdf;https://raw.githubusercontent.com/buda-base/owl-schema/master/ont-policy.rdf");
+        OntDocumentManager ontManager = new OntDocumentManager(
+                "owl-schema/ont-policy.rdf;https://raw.githubusercontent.com/buda-base/owl-schema/master/ont-policy.rdf");
         // not really needed since ont-policy sets it, but what if someone changes the
         // policy
         ontManager.setProcessImports(true);

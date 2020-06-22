@@ -170,7 +170,7 @@ public class JSONLDFormatter {
     public static Map<String, Object> getBDOContext() {
         Map<String, Map<String, Object>> map = null;
         try {
-            URL url = new URL("https://raw.githubusercontent.com/buda-base/owl-schema/master/context.jsonld");
+            URL url = new URL(System.getProperty("user.dir") + "/owl-schema/context.jsonld");
             map = mapper.readValue(url, new TypeReference<Map<String, Map<String, Object>>>() {
             });
         } catch (Exception e) {
@@ -355,7 +355,8 @@ public class JSONLDFormatter {
     }
 
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> modelToJsonObject(final Model m, final DocType type, final String mainResourceUri, RDFFormat format, final boolean reorder) {
+    public static Map<String, Object> modelToJsonObject(final Model m, final DocType type, final String mainResourceUri, RDFFormat format,
+            final boolean reorder) {
         final JsonLDWriteContext ctx = new JsonLDWriteContext();
         if (format.equals(RDFFormat.JSONLD_FRAME_PRETTY) || format.equals(RDFFormat.JSONLD_FRAME_FLAT)) {
             final Object frameObj = getFrameObject(type, mainResourceUri);

@@ -35,7 +35,7 @@ public class Prefixes {
     }
 
     public static void loadPrefixes() throws IOException {
-        URL url = new URL("https://raw.githubusercontent.com/buda-base/lds-queries/master/public/prefixes.txt");
+        URL url = new URL(System.getProperty("user.dir") + "/lds-queries/public/prefixes.txt");
         BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
         final StringBuilder sb = new StringBuilder();
         PREFIXES_MAP.clearNsPrefixMap();
@@ -56,7 +56,6 @@ public class Prefixes {
     }
 
     public static void loadPrefixes(final String filePath) throws IOException {
-
         log.info("reading prefixes from {}", filePath);
         final File file = new File(filePath);
         final BufferedReader br = new BufferedReader(new FileReader(file));
