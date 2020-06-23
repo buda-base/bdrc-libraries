@@ -1,11 +1,11 @@
 package io.bdrc.libraries.formatters;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -168,9 +168,10 @@ public class JSONLDFormatter {
     public static Map<String, Object> getBDOContext() {
         Map<String, Map<String, Object>> map = null;
         try {
-            URL url = new URL(System.getProperty("user.dir") + "/owl-schema/context.jsonld");
-            map = mapper.readValue(url, new TypeReference<Map<String, Map<String, Object>>>() {
+            FileInputStream in = new FileInputStream(System.getProperty("user.dir") + "/owl-schema/context.jsonld");
+            map = mapper.readValue(in, new TypeReference<Map<String, Map<String, Object>>>() {
             });
+            in.close();
         } catch (Exception e) {
             log.error("Error reading context file :" + e);
             e.printStackTrace();
