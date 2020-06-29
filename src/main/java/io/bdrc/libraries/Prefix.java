@@ -28,6 +28,14 @@ public class Prefix {
         }
     }
 
+    public Prefix() {
+        try {
+            loadPrefixes(LibProps.getProperty("prefixeFile"));
+        } catch (IOException ex) {
+            log.error("Prefixes initialization error", ex);
+        }
+    }
+
     public String getPrefixesString() {
         return prefixesString;
     }

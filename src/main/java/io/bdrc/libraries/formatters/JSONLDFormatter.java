@@ -37,6 +37,8 @@ import com.github.jsonldjava.core.JsonLdError;
 import com.github.jsonldjava.core.JsonLdOptions;
 import com.github.jsonldjava.utils.JsonUtils;
 
+import io.bdrc.libraries.LibProps;
+
 /*******************************************************************************
  * Copyright (c) 2017-2018 Buddhist Digital Resource Center (BDRC)
  *
@@ -168,7 +170,7 @@ public class JSONLDFormatter {
     public static Map<String, Object> getBDOContext() {
         Map<String, Map<String, Object>> map = null;
         try {
-            FileInputStream in = new FileInputStream(System.getProperty("user.dir") + "/owl-schema/context.jsonld");
+            FileInputStream in = new FileInputStream(LibProps.getProperty("jsonldContextFile"));
             map = mapper.readValue(in, new TypeReference<Map<String, Map<String, Object>>>() {
             });
             in.close();
