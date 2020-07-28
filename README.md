@@ -5,7 +5,7 @@ Repo for common code libraries to be used across tools such as xmltoldmigration,
     <dependency>
       <groupId>io.bdrc.libraries</groupId>
       <artifactId>bdrc-libraries</artifactId>
-      <version>0.5.2</version>
+      <version>0.15.0</version>
     </dependency>
 
 ### Some release info

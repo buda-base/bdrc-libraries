@@ -53,7 +53,7 @@ public class Identifier {
 
     public String transitionToNew(String requestedId, final int type) {
         if (type == INSTANCE_ID) {
-            if (requestedId != null && requestedId.startsWith("bdr:W"))
+            if (requestedId != null && requestedId.startsWith("bdr:W") && !requestedId.startsWith("bdr:W1ERI"))
                 return "bdr:MW"+requestedId.substring(5);
         } else if (type == IMAGEINSTANCE_ID) {
             if (requestedId != null && requestedId.startsWith("bdr:I"))
