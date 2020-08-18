@@ -36,6 +36,7 @@ public class Models {
 	public static final String BDA = "http://purl.bdrc.io/admindata/";
 	public static final String BDG = "http://purl.bdrc.io/graph/";
 	public static final String BDR = "http://purl.bdrc.io/resource/";
+	public static final String BDU = "http://purl.bdrc.io/resource-nc/user/";
 	public static final String BF = "http://id.loc.gov/ontologies/bibframe/";
 	public static final String VCARD = VCARD4.getURI();
 
@@ -430,6 +431,7 @@ public class Models {
 		m.setNsPrefix("bdr", BDR);
 		m.setNsPrefix("bda", BDA);
 		m.setNsPrefix("bdg", BDG);
+		m.setNsPrefix("bdu", BDU);
 		m.setNsPrefix("owl", OWL.getURI());
 		m.setNsPrefix("bf", BF);
 		m.setNsPrefix("rdf", RDF.getURI());
