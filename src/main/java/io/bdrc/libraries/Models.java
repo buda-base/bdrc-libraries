@@ -139,7 +139,11 @@ public class Models {
 	 */
 	public static Resource getAdminData(Resource rez) {
 		Model m = rez.getModel();
-		Resource admR = m.createResource(BDA + rez.getLocalName());
+		String firstLetter = "";
+		if (rez.getURI().startsWith(BDA)) {
+		    firstLetter = "A";
+		}
+		Resource admR = m.createResource(BDA + firstLetter + rez.getLocalName());
 		if (!m.contains(admR, RDF.type, m.createResource(ADM + "AdminData"))) {
 			admR.addProperty(RDF.type, m.createResource(ADM + "AdminData"));
 			m.add(admR, m.createProperty(ADM + "adminAbout"), rez);
@@ -441,7 +445,6 @@ public class Models {
 		m.setNsPrefix("rkts", "http://purl.rkts.eu/resource/");
 		if (addVcard)
 			m.setNsPrefix("vcard", VCARD4.getURI());
-
 	}
 
 	public static void addReleased(Model m, Resource r) {
