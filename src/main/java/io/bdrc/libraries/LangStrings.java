@@ -331,12 +331,13 @@ public class LangStrings  {
     public static String normalizeTibetan(String s) {
         String res = Normalizer.normalize(s, Normalizer.Form.NFD);
         // Normalizer doesn't normalize deprecate characters such as 0x0F79
-        res = res.replace("\u0F79", "\u0FB3\u0F71\u0F80");
-        res = res.replace("\u0F77", "\u0FB2\u0F71\u0F80");
+        res = res.replaceAll("\u0F79", "\u0FB3\u0F71\u0F80");
+        res = res.replaceAll("\u0F77", "\u0FB2\u0F71\u0F80");
         // it also doesn't normalize characters which use is discouraged:
-        res = res.replace("\u0F81", "\u0F71\u0F80");
-        res = res.replace("\u0F75", "\u0F71\u0F74");
-        res = res.replace("\u0F73", "\u0F71\u0F72");
+        res = res.replaceAll("\u0F81", "\u0F71\u0F80");
+        res = res.replaceAll("\u0F75", "\u0F71\u0F74");
+        res = res.replaceAll("\u0F73", "\u0F71\u0F72");
+        res = res.replaceAll(" ([\u0f71-\u0f7e]་?) ", "\1"); 
         return res;
     }
 

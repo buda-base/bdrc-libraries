@@ -49,7 +49,7 @@ public class StreamingHelpers {
                     JenaFormat = BudaMediaTypes.getJenaFromExtension(format);
                 }
                 if (JenaFormat == null || JenaFormat.equals("STTL") || JenaFormat.contentEquals(RDFLanguages.strLangTriG)) {
-                    final RDFWriter writer = TTLRDFWriter.getSTTLRDFWriter(model, "");
+                    final RDFWriter writer = TTLRDFWriter.getSTTLRDFWriter(model, null);
                     writer.output(os);
                     return;
                 }
@@ -71,7 +71,7 @@ public class StreamingHelpers {
                 } else {
                     String JenaFormat = BudaMediaTypes.getJenaFromExtension(format);
                     if (JenaFormat == null || JenaFormat.equals("STTL")) {
-                        final RDFWriter writer = TTLRDFWriter.getSTTLRDFWriter(model, "");
+                        final RDFWriter writer = TTLRDFWriter.getSTTLRDFWriter(model, null);
                         writer.output(os);
                         return;
                     }
