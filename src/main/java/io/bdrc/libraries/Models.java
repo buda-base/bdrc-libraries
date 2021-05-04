@@ -37,6 +37,8 @@ public class Models {
 	public static final String BDG = "http://purl.bdrc.io/graph/";
 	public static final String BDR = "http://purl.bdrc.io/resource/";
 	public static final String BDU = "http://purl.bdrc.io/resource-nc/user/";
+	public static final String AUT = "http://purl.bdrc.io/ontology/ext/auth/";
+	public static final String ADR = "http://purl.bdrc.io/resource-nc/auth/";
 	public static final String BF = "http://id.loc.gov/ontologies/bibframe/";
 	public static final String VCARD = VCARD4.getURI();
 
@@ -104,6 +106,8 @@ public class Models {
 		typeToRepo.put("EtextContent", BDA + "GR0009");
 		typeToRepo.put("Role", BDA + "GR0010");
 		typeToRepo.put("Product", BDA + "GR0011");
+		typeToRepo.put("Collection", BDA + "GR0011");
+		typeToRepo.put("Subscriber", BDA + "GR0012");
 	}
 
 	public static String getMd5(String resId) {
@@ -265,7 +269,8 @@ public class Models {
 		PRODUCT_ORG("productOrg", "PG", ADM + "ProductOrg"), TITLE("title", "TT", BDO + "WorkTitle"),
 		VCARD_ADDR("vcardAddr", "VA", VCARD + "Address"), VOLUME("volume", "VL", BDO + "Volume"), CONTENT_LOC("contentLoc", "CL", BDO + "ContentLocation"),
 		MICROFILM("microfilmItem", "MF", BDO + "ItemMicrofilmAsset"), CATALOG("catalogLoc", "CT", BDO + "CatalogLocation"),
-		DATE_INDICATION("dateIndication", "DT", BDO + "DateIndication"), IDENTIFIER("identifier", "ID", BDO+"Identifier");
+		DATE_INDICATION("dateIndication", "DT", BDO + "DateIndication"), IDENTIFIER("identifier", "ID", BDO+"Identifier"),
+		SUBSCRIBER_ORG("subscriberHasOrg", "SO", AUT+"SubscriberOrg");
 
 		private String label;
 		private String prefix;
