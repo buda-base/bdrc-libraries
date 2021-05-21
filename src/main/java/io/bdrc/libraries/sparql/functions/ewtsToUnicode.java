@@ -17,7 +17,7 @@ public class ewtsToUnicode extends FunctionBase1 {
         if (lt != null && lt.endsWith("-x-ewts")) {
             final String val = v.getString();
             final String res = ewtsConverter.toUnicode(val);
-            final String reslt = lt.substring(lt.length()-7);
+            final String reslt = lt.substring(0, lt.length()-7);
             return NodeValue.makeLangString(res, reslt);
         }
         return v;
