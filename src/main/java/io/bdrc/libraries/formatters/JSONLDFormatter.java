@@ -86,7 +86,7 @@ public class JSONLDFormatter {
     }
 
     public static enum DocType {
-        CORPORATION, LINEAGE, ETEXT, ETEXTCONTENT, ROLE, PERSON, VOLUME, PLACE, TOPIC, ITEM, WORK, PRODUCT, TEST, ANN, ANC, ANP, OA;
+        CORPORATION, LINEAGE, ETEXT, ETEXTCONTENT, ROLE, PERSON, VOLUME, PLACE, TOPIC, ITEM, WORK, COLLECTION, TEST, ANN, ANC, ANP, OA, INSTANCE;
     }
 
     public final static Map<DocType, Object> docTypeToSimpleContext = new HashMap<>();
@@ -101,7 +101,8 @@ public class JSONLDFormatter {
         docTypeToSimpleContext.put(DocType.TOPIC, simpleContext);
         docTypeToSimpleContext.put(DocType.LINEAGE, simpleContext);
         docTypeToSimpleContext.put(DocType.CORPORATION, simpleContext);
-        docTypeToSimpleContext.put(DocType.PRODUCT, simpleContext);
+        docTypeToSimpleContext.put(DocType.COLLECTION, simpleContext);
+        docTypeToSimpleContext.put(DocType.INSTANCE, simpleContext);
         docTypeToSimpleContext.put(DocType.ITEM, simpleContext);
         docTypeToSimpleContext.put(DocType.ROLE, simpleContext);
         docTypeToSimpleContext.put(DocType.ANN, Arrays.asList(simpleContext, annoContext));
@@ -123,7 +124,8 @@ public class JSONLDFormatter {
         docTypeToContextObject.put(DocType.TOPIC, bdoContextObject);
         docTypeToContextObject.put(DocType.LINEAGE, bdoContextObject);
         docTypeToContextObject.put(DocType.CORPORATION, bdoContextObject);
-        docTypeToContextObject.put(DocType.PRODUCT, bdoContextObject);
+        docTypeToContextObject.put(DocType.COLLECTION, bdoContextObject);
+        docTypeToContextObject.put(DocType.INSTANCE, bdoContextObject);
         docTypeToContextObject.put(DocType.ITEM, bdoContextObject);
         docTypeToContextObject.put(DocType.ROLE, bdoContextObject);
         docTypeToContextObject.put(DocType.ANN, annContextObject);
@@ -135,13 +137,16 @@ public class JSONLDFormatter {
     public static final Map<String, DocType> typeToDocType = new HashMap<>();
     static {
         typeToDocType.put("Person", DocType.PERSON);
-        typeToDocType.put("Volume", DocType.VOLUME);
+        typeToDocType.put("ImageGroup", DocType.VOLUME);
         typeToDocType.put("Work", DocType.WORK);
         typeToDocType.put("Place", DocType.PLACE);
         typeToDocType.put("Topic", DocType.TOPIC);
         typeToDocType.put("Lineage", DocType.LINEAGE);
         typeToDocType.put("Corporation", DocType.CORPORATION);
-        typeToDocType.put("Product", DocType.PRODUCT);
+        typeToDocType.put("Collection", DocType.COLLECTION);
+        typeToDocType.put("Instance", DocType.INSTANCE);
+        typeToDocType.put("ImageInstance", DocType.INSTANCE);
+        typeToDocType.put("EtextInstance", DocType.INSTANCE);
         typeToDocType.put("Item", DocType.ITEM);
         typeToDocType.put("Role", DocType.ROLE);
         typeToDocType.put("Annotation", DocType.ANN);
@@ -152,14 +157,15 @@ public class JSONLDFormatter {
     public static final Map<DocType, Object> typeToRootShortUri = new EnumMap<>(DocType.class);
     static {
         typeToRootShortUri.put(DocType.PERSON, "Person");
-        typeToRootShortUri.put(DocType.VOLUME, Arrays.asList("Volume", "VolumeImageAsset", "VolumePhysicalAsset"));
+        typeToRootShortUri.put(DocType.VOLUME, Arrays.asList("ImageGroup"));
         typeToRootShortUri.put(DocType.WORK, "Work");
         typeToRootShortUri.put(DocType.PLACE, "Place");
         typeToRootShortUri.put(DocType.TOPIC, "Topic");
         typeToRootShortUri.put(DocType.LINEAGE, "Lineage");
         typeToRootShortUri.put(DocType.CORPORATION, "Corporation");
-        typeToRootShortUri.put(DocType.PRODUCT, "adm:Product");
-        typeToRootShortUri.put(DocType.ITEM, Arrays.asList("Item", "ItemImageAsset", "ItemInputEtext", "ItemOCREtext", "ItemPhysicalAsset"));
+        typeToRootShortUri.put(DocType.COLLECTION, "Collection");
+        typeToRootShortUri.put(DocType.ITEM, "Item");
+        typeToRootShortUri.put(DocType.INSTANCE, Arrays.asList("Instance", "ImageInstance", "EtextInstance"));
         typeToRootShortUri.put(DocType.ROLE, "Role");
         typeToRootShortUri.put(DocType.ANN, "Annotation");
         // this is what's in the context, so not OrderedCollection
@@ -257,7 +263,7 @@ public class JSONLDFormatter {
 
     public static Object getFrameObject(DocType type, String mainResourceUri) {
         // for works, we frame by @id, for cases with outlines
-        boolean needsId = (type == DocType.WORK || type == DocType.TEST);
+        boolean needsId = (type == DocType.INSTANCE || type == DocType.TEST);
         if (!needsId && typeToFrameObject.containsKey(type))
             return typeToFrameObject.get(type);
         Map<String, Object> jsonObject = new HashMap<>();
@@ -280,11 +286,7 @@ public class JSONLDFormatter {
                 return -1;
             if (s1.startsWith("adm:"))
                 return 1;
-            if (s1.startsWith("tbr:"))
-                return 1;
             if (s2.startsWith("adm:"))
-                return -1;
-            if (s2.startsWith("tbr:"))
                 return -1;
             if (s1.equals("@context"))
                 return 1;
