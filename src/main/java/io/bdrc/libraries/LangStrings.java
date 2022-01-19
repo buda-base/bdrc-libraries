@@ -164,8 +164,6 @@ public class LangStrings  {
             return "bo-x-phon-en-m-tbrc";
         if (language.equals("english") && encoding.equals("alternatePhonetic"))
             return "bo-x-phon-en";
-        if (language.equals("tibetan") && encoding.endsWith("honetic"))
-            return "bo-x-ewts"; // only a few case in the database
         return getIso639(language)+getBCP47Suffix(encoding);
     }
 
