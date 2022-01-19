@@ -142,6 +142,7 @@ public class LangStrings  {
             if (encoding != null && !encoding.isEmpty()) {
                 if (encoding.equals("extendedWylie")) return EWTS_TAG;
                 if (encoding.equals("tbrcPhonetic")) return "bo-x-phon-en-m-tbrc";
+                if (encoding.equals("alternatePhonetic")) return "bo-x-phon-en";
                 throw new IllegalArgumentException("encoding with no language!");
             }
             return null;
@@ -159,6 +160,12 @@ public class LangStrings  {
                 return "pi-x-kmfemc" ;
             }
         }
+        if (language.equals("english") && encoding.equals("tbrcPhonetic"))
+            return "bo-x-phon-en-m-tbrc";
+        if (language.equals("english") && encoding.equals("alternatePhonetic"))
+            return "bo-x-phon-en";
+        if (language.equals("tibetan") && encoding.endsWith("honetic"))
+            return "bo-x-ewts"; // only a few case in the database
         return getIso639(language)+getBCP47Suffix(encoding);
     }
 
@@ -278,7 +285,7 @@ public class LangStrings  {
             if (!lang.equals("sanskrit") && !lang.equals("tibetan")) lang = "";
         }
         String res = "en";
-        if (lang.equals("english") && (!encoding.isEmpty() && !encoding.equals("native"))) {
+        if (lang.equals("english") && (!encoding.isEmpty() && !encoding.equals("native") && !encoding.equals("tbrcPhonetic") && !encoding.equals("alternatePhonetic"))) {
             //	        ExceptionHelper.logException(ET_LANG, RID, subRID, propertyHint, "mixed english + encoding `"+encoding+"` turned into `en-x-mixed`, please convert other language to unicode");
             return "en-x-mixed";
         }
