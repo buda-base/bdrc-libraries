@@ -108,6 +108,7 @@ public class Models {
 		typeToRepo.put("Product", BDA + "GR0011");
 		typeToRepo.put("Collection", BDA + "GR0011");
 		typeToRepo.put("Subscriber", BDA + "GR0015");
+		typeToRepo.put("Outline", BDA + "GR0016");
 	}
 
 	public static String getMd5(String resId) {
@@ -127,7 +128,6 @@ public class Models {
 		Resource rez = m.createResource(uri);
 		if (typeUri != null)
 			rez.addProperty(RDF.type, m.createResource(typeUri));
-		rez.addLiteral(m.createProperty(BDO + "isRoot"), true);
 		return rez;
 	}
 
@@ -216,12 +216,6 @@ public class Models {
 			// nothing to do since they aren't stored in their own repo
 		}
 
-		// MAY BE REMOVED - not needed since presence of ?s adm:gitInfo ?o indicates
-		// that ?s is a root
-		// or adm:graphId is also a good indicator of a root AdminData.
-		// AdminData
-		admR.addLiteral(m.createProperty(BDO + "isRoot"), true);
-
 		return admR;
 	}
 
@@ -230,7 +224,7 @@ public class Models {
 	}
 
 	public static Resource getAdminRoot(Resource rez, boolean create) {
-		Resource admR = getAdminRoot(rez.getModel());
+		Resource admR = getAdminRoot(rez.getModel(), rez);
 
 		if (admR == null && create) {
 			admR = createAdminRoot(rez);
@@ -239,19 +233,14 @@ public class Models {
 		return admR;
 	}
 
-	public static Resource getAdminRoot(Model m) {
-		ResIterator resIt = m.listResourcesWithProperty(RDF.type, m.createResource(ADM + "AdminData"));
+	public static final Property adminAbout = ResourceFactory.createProperty(ADM+"adminAbout");
+	public static final Property gitRepo = ResourceFactory.createProperty(ADM+"gitRepo");
+	public static Resource getAdminRoot(final Model m, final Resource res) {
+		final ResIterator resIt = m.listResourcesWithProperty(RDF.type, m.createResource(ADM + "AdminData"));
 		while (resIt.hasNext()) {
-			Resource admR = resIt.next();
-			Statement stmt = m.getProperty(admR, m.createProperty(ADM + "gitInfo"));
-			RDFNode node = stmt != null ? stmt.getObject() : null;
-			if (node != null) {
-				return admR;
-			}
-			// TO BE REMOVED ??
-			if (m.containsLiteral(admR, m.createProperty(BDO + "isRoot"), true)) {
-				return admR;
-			}
+			final Resource admR = resIt.next();
+			if (admR.hasProperty(gitRepo))
+			    return admR;
 		}
 
 		return null;
@@ -395,18 +384,22 @@ public class Models {
 	}
 
 	public static Resource getFacetNode(FacetType facet, String nsUri, Resource rez) {
-		Resource nodeType = facet.getNodeType();
+		final Resource nodeType = facet.getNodeType();
 		return getFacetNode(facet, nsUri, rez, nodeType);
 	}
 
-	public static Resource getFacetNode(FacetType facet, String nsUri, Resource rez, Resource nodeType) {
-		Model m = rez.getModel();
-		Resource rootAdm = getAdminRoot(rez);
-		String id = generateId(facet, rez, USER, rootAdm);
-		Resource facetNode = m.createResource(nsUri + id);
-		facetNode.addProperty(RDF.type, nodeType);
-		return facetNode;
+	public static Resource getFacetNode(final FacetType facet, final String nsUri, final Resource rez, final Resource nodeType) {
+	    final Resource rootAdm = getAdminRoot(rez);
+		return getFacetNode(facet, nsUri, rez, nodeType, rootAdm);
 	}
+	
+    public static Resource getFacetNode(FacetType facet, String nsUri, Resource rez, Resource nodeType, final Resource rootAdm) {
+        final Model m = rez.getModel();
+        final String id = generateId(facet, rez, USER, rootAdm);
+        final Resource facetNode = m.createResource(nsUri + id);
+        facetNode.addProperty(RDF.type, nodeType);
+        return facetNode;
+     }
 
 	public static Resource getEvent(Resource rez, String eventType, String eventProp) {
 		Model m = rez.getModel();

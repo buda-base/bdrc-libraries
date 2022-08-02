@@ -60,6 +60,11 @@ public class LangStringsTestFAILED
 	}
 	
 	@Test
+    public void testLikelyEwts() {
+	    System.out.println(isMostLikelyEwts("corpus scriptorum mongolorum instituti linguae et litterarum comiteti scientiarum et educationis altae reipublicae populi mongoli"));
+	}
+	
+	@Test
 	public void testEwtsShad() {
 	    assertTrue("bla ma/".equals(addEwtsShad("bla ma")));
 	    assertTrue("bla ma/".equals(addEwtsShad("bla ma /_/")));
