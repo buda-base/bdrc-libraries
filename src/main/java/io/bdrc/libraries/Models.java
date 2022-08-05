@@ -128,6 +128,7 @@ public class Models {
 		Resource rez = m.createResource(uri);
 		if (typeUri != null)
 			rez.addProperty(RDF.type, m.createResource(typeUri));
+		rez.addLiteral(m.createProperty(BDO + "isRoot"), true);
 		return rez;
 	}
 
@@ -215,7 +216,7 @@ public class Models {
 			// probably called from TaxonomyMigration or ImagegroupMigration -
 			// nothing to do since they aren't stored in their own repo
 		}
-
+		admR.addLiteral(m.createProperty(BDO + "isRoot"), true);
 		return admR;
 	}
 
