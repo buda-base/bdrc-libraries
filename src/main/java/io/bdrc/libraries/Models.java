@@ -109,6 +109,7 @@ public class Models {
 		typeToRepo.put("Collection", BDA + "GR0011");
 		typeToRepo.put("Subscriber", BDA + "GR0015");
 		typeToRepo.put("Outline", BDA + "GR0016");
+		typeToRepo.put("Taxonomy", BDA + "GR0016");
 	}
 
 	public static String getMd5(String resId) {
