@@ -4,7 +4,7 @@
   <groupId>io.bdrc.libraries</groupId>
   <artifactId>bdrc-libraries</artifactId>
   <packaging>jar</packaging>
-  <version>0.18.0</version>
+  <version>0.19.0</version>
   <name>bdrc-libraries</name>
   <description>BDRC common tool libraries</description>
   <url>https://github.com/buda-base/bdrc-libraries</url>
@@ -39,9 +39,9 @@
   </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <jena.version>3.14.0</jena.version>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <jena.version>4.6.1</jena.version>
   </properties>
   <dependencies>
     <dependency>
@@ -53,22 +53,22 @@
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>4.11.0.201803080745-r</version>
+      <version>6.3.0.202209071007-r</version>
     </dependency>
     <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
-        <version>3.9</version>
+        <version>3.12.0</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>1.7.25</version>
+      <version>1.7.36</version>
     </dependency>
     <dependency>
       <groupId>io.bdrc.ewtsconverter</groupId>
       <artifactId>ewts-converter</artifactId>
-      <version>1.5.1</version>
+      <version>1.6.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.jena</groupId>
@@ -79,12 +79,6 @@
       <groupId>org.apache.jena</groupId>
       <artifactId>jena-arq</artifactId>
       <version>${jena.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>jsonld-java</artifactId>
-          <groupId>com.github.jsonld-java</groupId>
-        </exclusion>
-      </exclusions>
     </dependency> 
     <!-- https://mvnrepository.com/artifact/org.apache.jena/jena-rdfconnection -->
     <dependency>
@@ -95,7 +89,7 @@
     <dependency>
       <groupId>io.bdrc</groupId>
       <artifactId>jena-stable-turtle</artifactId>
-      <version>0.7.3</version>
+      <version>0.7.4</version>
       <exclusions>
         <exclusion>
           <artifactId>jena-arq</artifactId>
@@ -109,21 +103,6 @@
         <version>2.3.1</version>
     </dependency>
     <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-core</artifactId>
-        <version>2.3.0.1</version>
-    </dependency>
-    <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-impl</artifactId>
-        <version>2.3.2</version>
-    </dependency>
-    <dependency>
-        <groupId>javax.activation</groupId>
-        <artifactId>activation</artifactId>
-        <version>1.1.1</version>
-    </dependency>
-    <dependency>
         <groupId>com.atlascopco</groupId>
         <artifactId>hunspell-bridj</artifactId>
         <version>1.0.4</version>
@@ -131,36 +110,36 @@
     <dependency>
             <groupId>de.digitalcollections.iiif</groupId>
             <artifactId>iiif-apis</artifactId>
-            <version>0.3.7</version>
+            <version>0.3.9</version>
     </dependency>    
     <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.11.636</version>
+            <version>1.12.305</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-web</artifactId>
-        <version>5.2.1.RELEASE</version>
+        <version>5.3.23</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
-        <version>5.2.1.RELEASE</version>
+        <version>5.3.23</version>
     </dependency>    
-    <dependency>
-        <groupId>com.github.jsonld-java</groupId>
-        <artifactId>jsonld-java</artifactId>
-        <version>0.13.3</version>
-    </dependency> 
     <!-- Email stuff -->
     <dependency>
         <groupId>com.sun.mail</groupId>
         <artifactId>javax.mail</artifactId>
         <version>1.6.2</version>
-    </dependency>  
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>2.13.4</version>
+    </dependency>
   </dependencies>
   <profiles>
     <profile>
@@ -176,7 +155,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.6</version>
+            <version>3.0.1</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -202,7 +181,7 @@
    <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-source-plugin</artifactId>
-    <version>2.2.1</version>
+    <version>3.2.1</version>
     <executions>
      <execution>
       <id>attach-sources</id>
@@ -215,7 +194,7 @@
    <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-javadoc-plugin</artifactId>
-    <version>3.1.1</version>
+    <version>3.4.1</version>
     <executions>
      <execution>
       <id>attach-javadocs</id>
