@@ -59,7 +59,7 @@ public class GitHelpers {
     public static void ensureGitRepo(String type, String REPOS_BASE_DIR) {
         if (typeRepo.containsKey(type))
             return;
-        String dirpath = REPOS_BASE_DIR + type + 's';
+        String dirpath = REPOS_BASE_DIR + type + "s-20220922";
         createDirIfNotExists(dirpath);
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         File gitDir = new File(dirpath + "/.git");

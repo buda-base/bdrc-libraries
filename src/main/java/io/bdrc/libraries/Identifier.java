@@ -19,6 +19,7 @@ public class Identifier {
     public static final int MANIFEST_ID_WORK_IN_VOLUMEID = 6;
     public static final int MANIFEST_ID_VOLUMEID_OUTLINE = 8;
     public static final int MANIFEST_ID_WORK_IN_VOLUMEID_OUTLINE = 10;
+    public static final int MANIFEST_ID_ITEM = 11;
     
     final static int INSTANCE_ID = 100;
     final static int IMAGEINSTANCE_ID = 101;
@@ -148,6 +149,12 @@ public class Identifier {
             setPageNumFromIdPart(thirdId);
             nbMaxPartsExpected = 3;
             this.subtype = MANIFEST_ID_WORK_IN_ITEM;
+            break;
+        case "i":
+            this.imageInstanceId = transitionToNew(firstId, INSTANCE_ID);
+            setPageNumFromIdPart(secondId);
+            nbMaxPartsExpected = 2;
+            this.subtype = MANIFEST_ID_ITEM;
             break;
         case "v":
             this.imageGroupId = transitionToNew(firstId, IMAGEGROUP_ID);
