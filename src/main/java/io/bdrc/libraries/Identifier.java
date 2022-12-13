@@ -151,7 +151,7 @@ public class Identifier {
             this.subtype = MANIFEST_ID_WORK_IN_ITEM;
             break;
         case "i":
-            this.imageInstanceId = transitionToNew(firstId, INSTANCE_ID);
+            this.imageInstanceId = transitionToNew(firstId, IMAGEINSTANCE_ID);
             setPageNumFromIdPart(secondId);
             nbMaxPartsExpected = 2;
             this.subtype = MANIFEST_ID_ITEM;
