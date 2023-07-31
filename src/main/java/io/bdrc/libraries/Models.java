@@ -257,10 +257,10 @@ public class Models {
 		HOLDER("lineageHolder", "LH", BDO + "LineageHolder"), LINEAGE_HOLDER("lineageHolder", "LH", BDO + "LineageHolder"),
 		LOG_ENTRY("logEntry", "LG", ADM + "LogEntry"), NAME("name", "NM", BDO + "PersonName"), NOTE("note", "NT", BDO + "Note"),
 		PRODUCT_ORG("productOrg", "PG", ADM + "ProductOrg"), TITLE("title", "TT", BDO + "WorkTitle"),
-		VCARD_ADDR("vcardAddr", "VA", VCARD + "Address"), ETEXTVOLUME ("etextVolume", "EV", BDO + "EtextVolume"), VOLUME("volume", "V", BDO + "Volume"), CONTENT_LOC("contentLoc", "CL", BDO + "ContentLocation"),
+		VCARD_ADDR("vcardAddr", "VA", VCARD + "Address"), ETEXTVOLUME ("etextVolume", "VE", BDO + "EtextVolume"), VOLUME("volume", "V", BDO + "Volume"), CONTENT_LOC("contentLoc", "CL", BDO + "ContentLocation"),
 		MICROFILM("microfilmItem", "MF", BDO + "ItemMicrofilmAsset"), CATALOG("catalogLoc", "CT", BDO + "CatalogLocation"),
 		DATE_INDICATION("dateIndication", "DT", BDO + "DateIndication"), IDENTIFIER("identifier", "ID", BDO+"Identifier"),
-		SUBSCRIBER_ORG("subscriberHasOrganization", "SO", AUT+"SubscriberOrganization"), ITEMVOLUME("itemVolume", "ITV", BDO + "VolumePhysicalAsset");
+		SUBSCRIBER_ORG("subscriberHasOrganization", "SO", AUT+"SubscriberOrganization"), ITEMVOLUME("itemVolume", "IV", BDO + "VolumePhysicalAsset");
 
 		private String label;
 		private String prefix;
