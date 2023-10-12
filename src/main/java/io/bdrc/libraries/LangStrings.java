@@ -168,7 +168,7 @@ public class LangStrings  {
     }
 
     // from http://stackoverflow.com/a/14066594/2560906
-    private static boolean isAllEwtsChars(String input) {
+    public static boolean isAllEwtsChars(String input) {
         boolean res = true;
         for (int i = 0; i < input.length(); i++) {
             int c = input.charAt(i);
@@ -180,7 +180,7 @@ public class LangStrings  {
         return res;
     }
 
-    private static boolean isAllLatn(String input) {
+    public static boolean isAllLatn(String input) {
         for (int i = 0; i < input.length(); i++) {
             int c = input.charAt(i);
             if (c > 0x36F) {
@@ -204,7 +204,7 @@ public class LangStrings  {
             'Ǖ', 'Ǘ', 'Ǚ', 'Ǜ', 'Ü',
             'ǖ', 'ǘ', 'ǚ', 'ǜ', 'ü');
     // test if the Pinyin has diacritics
-    private static boolean isPinyinNDia(String input) {
+    public static boolean isPinyinNDia(String input) {
         for (int i = 0; i < input.length(); i++) {
             int c = input.charAt(i);
             // if we encounter a number, it has diacritics:
@@ -230,7 +230,7 @@ public class LangStrings  {
         return (nbNonTibUni / len < 0.1);
     }
 
-    private static boolean isAllChineseUnicode(String input) {
+    public static boolean isAllChineseUnicode(String input) {
         boolean isChinese = true;
         for (int i = 0; i < input.length(); i++) {
             int c = input.charAt(i);
@@ -245,7 +245,7 @@ public class LangStrings  {
     // check for traditional characters.
     // TODO: some strings, such as 阿毘達磨文献における思想の展開
     // are a mix of Hans and Hant (mostly Hant except 献 which is simplified for 獻)
-    private static boolean isHant(String input) {
+    public static boolean isHant(String input) {
         final int length = input.length();
         for (int offset = 0; offset < length; ) {
             final int codepoint = input.codePointAt(offset);
@@ -392,5 +392,20 @@ public class LangStrings  {
     public static boolean isLikelyEnglish(String value) {
         Matcher m = englishP.matcher(value);
         return m.find();
+    }
+    
+    public static String guessLangTag(final String value) {
+        final String testStr = value.substring(0, Math.min(10, value.length()));
+        if (isAllTibetanUnicode(testStr))
+            return "bo";
+        if (isAllChineseUnicode(testStr))
+            return "zh-Hani";
+        if (isDeva(testStr))
+            return "sa-deva";
+        if (isLikelyEnglish(testStr))
+            return "en";
+        if (isAllEwtsChars(testStr))
+            return "bo-x-ewts";
+        return null;
     }
 }
