@@ -4,7 +4,7 @@
   <groupId>io.bdrc.libraries</groupId>
   <artifactId>bdrc-libraries</artifactId>
   <packaging>jar</packaging>
-  <version>0.21.0</version>
+  <version>0.21.1</version>
   <name>bdrc-libraries</name>
   <description>BDRC common tool libraries</description>
   <url>https://github.com/buda-base/bdrc-libraries</url>
@@ -68,7 +68,7 @@
     <dependency>
       <groupId>io.bdrc.ewtsconverter</groupId>
       <artifactId>ewts-converter</artifactId>
-      <version>1.6.0</version>
+      <version>1.7.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.jena</groupId>
