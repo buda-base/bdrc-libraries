@@ -64,25 +64,19 @@ public class StreamingHelpers {
         return new StreamingResponseBody() {
             @Override
             public void writeTo(OutputStream os) {
-                if (format.equals("jsonld")) {
-                    Object json = JSONLDFormatter.modelToJsonObject(model, res, docType, prefixes);
-                    JSONLDFormatter.jsonObjectToOutputStream(json, os);
-
-                } else {
-                    String JenaFormat = BudaMediaTypes.getJenaFromExtension(format);
-                    if (JenaFormat == null || JenaFormat.equals("STTL")) {
-                        final RDFWriter writer = TTLRDFWriter.getSTTLRDFWriter(model, null);
-                        writer.output(os);
-                        return;
-                    }
-                    if (JenaFormat.contentEquals(RDFLanguages.strLangTriG)) {
-                        DatasetGraph dsg = DatasetFactory.create().asDatasetGraph();
-                        dsg.addGraph(ResourceFactory.createResource(res).asNode(), model.getGraph());
-                        new STriGWriter().write(os, dsg, prefixes, "", GlobalHelpers.createWriterContext());
-                        return;
-                    }
-                    model.write(os, JenaFormat);
+                String JenaFormat = BudaMediaTypes.getJenaFromExtension(format);
+                if (JenaFormat == null || JenaFormat.equals("STTL")) {
+                    final RDFWriter writer = TTLRDFWriter.getSTTLRDFWriter(model, null);
+                    writer.output(os);
+                    return;
                 }
+                if (JenaFormat.contentEquals(RDFLanguages.strLangTriG)) {
+                    DatasetGraph dsg = DatasetFactory.create().asDatasetGraph();
+                    dsg.addGraph(ResourceFactory.createResource(res).asNode(), model.getGraph());
+                    new STriGWriter().write(os, dsg, prefixes, "", GlobalHelpers.createWriterContext());
+                    return;
+                }
+                model.write(os, JenaFormat);
             }
         };
     }

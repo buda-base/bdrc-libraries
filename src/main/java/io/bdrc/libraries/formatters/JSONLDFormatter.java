@@ -21,21 +21,20 @@ import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.riot.JsonLDWriteContext;
+import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFFormat;
-import org.apache.jena.riot.RDFFormat.JSONLDVariant;
+import org.apache.jena.riot.RDFWriter;
 import org.apache.jena.riot.system.PrefixMap;
-import org.apache.jena.riot.writer.JsonLD10Writer;
+import org.apache.jena.riot.writer.JsonLD11Writer;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.util.Context;
 import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.jsonldjava.core.JsonLdError;
-import com.github.jsonldjava.core.JsonLdOptions;
-import com.github.jsonldjava.utils.JsonUtils;
+
 
 import io.bdrc.libraries.LibProps;
 
@@ -75,13 +74,8 @@ public class JSONLDFormatter {
     public static boolean prettyPrint = true;
     public static final String ANN_PREFIX_SHORT = "bdan";
     public static final String ANC_PREFIX_SHORT = "bdac";
-    public final static JsonLdOptions jsonLdOptions = new JsonLdOptions();
 
     static {
-        jsonLdOptions.setProcessingMode("json-ld-1.1");
-        jsonLdOptions.setUseNativeTypes(true);
-        jsonLdOptions.setCompactArrays(true);
-        jsonLdOptions.setPruneBlankNodeIdentifiers(true);
         initializeAnnFrameObjects();
     }
 
@@ -346,61 +340,9 @@ public class JSONLDFormatter {
         return res;
     }
 
-    public static Map<String, Object> modelToJsonObject(final Model m, final String mainResourceUri, DocType type, PrefixMap pm) {
-        if (type == null) {
-            type = getDocType(m, mainResourceUri);
-            if (type == null) {
-                log.info("not able to determine type of resource {} for frame output, outputting compact", mainResourceUri);
-                return modelToJsonObject(m, null, mainResourceUri, RDFFormat.JSONLD10_COMPACT_PRETTY, false, pm);
-            }
-        }
-        return modelToJsonObject(m, type, mainResourceUri, RDFFormat.JSONLD10_FRAME_PRETTY, false, pm);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static Map<String, Object> modelToJsonObject(final Model m, final DocType type, final String mainResourceUri, RDFFormat format,
-            final boolean reorder, PrefixMap pm) {
-        final JsonLDWriteContext ctx = new JsonLDWriteContext();
-        if (format.equals(RDFFormat.JSONLD10_FRAME_PRETTY) || format.equals(RDFFormat.JSONLD10_FRAME_FLAT)) {
-            final Object frameObj = getFrameObject(type, mainResourceUri);
-            ctx.setFrame(frameObj);
-        }
-        final JSONLDVariant variant = (RDFFormat.JSONLDVariant) format.getVariant();
-        ctx.setJsonLDContext(docTypeToContextObject.get(type));
-        ctx.setOptions(jsonLdOptions);
-        final DatasetGraph g = DatasetFactory.create(m).asDatasetGraph();
-        Map<String, Object> tm;
-        try {
-            tm = (Map<String, Object>) JsonLD10Writer.toJsonLDJavaAPI(variant, g, pm, null, ctx);
-            // replacing context with URI
-            tm.replace("@context", docTypeToSimpleContext.get(type));
-            if (reorder)
-                tm = orderEntries(tm);
-        } catch (JsonLdError | IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return tm;
-    }
-
-    public static void jsonObjectToOutputStream(Object jsonObject, OutputStream out) {
-        Writer wr = new OutputStreamWriter(out, Chars.charsetUTF8);
-        try {
-            if (prettyPrint) {
-                JsonUtils.writePrettyPrint(wr, jsonObject);
-                wr.write("\n");
-            } else {
-                JsonUtils.write(wr, jsonObject);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        IO.flush(wr);
-    }
-
     public static void writeModelAsCompact(Model m, OutputStream out, PrefixMap pm) {
-        Object jsonO = modelToJsonObject(m, null, null, RDFFormat.JSONLD10_COMPACT_PRETTY, false, pm);
-        jsonObjectToOutputStream(jsonO, out);
+        // JSONLD is not supported in Jena anymore, this is amazing
+        RDFWriter.source(m).lang(Lang.JSONLD11).output(out);
     }
 
 }

@@ -11,7 +11,6 @@ import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
@@ -27,6 +26,7 @@ import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.rdfconnection.RDFConnection;
 import org.apache.jena.rdfconnection.RDFConnectionFactory;
 import org.apache.jena.reasoner.Reasoner;
+import org.apache.jena.sparql.exec.http.QueryExecutionHTTPBuilder;
 
 public class SparqlCommons {
 
@@ -52,8 +52,7 @@ public class SparqlCommons {
         String query = "SELECT DISTINCT ?g ?rep\n" + "WHERE{\n" + "GRAPH ?g {\n" + "{\n" + "?s ?p <" + resUri + "> .\n" + "} \n" + "    union {\n"
                 + "<" + resUri + "> ?pp ?oo .\n" + "}\n" + "?ad adm:graphId ?g .\n" + "?ad adm:gitRepo ?rep\n" + "}\n" + "}ORDER BY ?rep";
         final Query q = QueryFactory.create(prefixes + " " + query);
-        System.out.println(q.toString());
-        final QueryExecution qe = QueryExecutionFactory.sparqlService(fusekiUrl, q);
+        final QueryExecution qe = QueryExecutionHTTPBuilder.service(fusekiUrl).query(q).build();
         ResultSet rs = qe.execSelect();
         while (rs.hasNext()) {
             QuerySolution qs = rs.next();
@@ -81,8 +80,7 @@ public class SparqlCommons {
         query = query + " } }";
         System.out.println(query);
         final Query q = QueryFactory.create(prefixes + " " + query);
-
-        final QueryExecution qe = QueryExecutionFactory.sparqlService(fusekiUrl, q);
+        final QueryExecution qe = QueryExecutionHTTPBuilder.service(fusekiUrl).query(q).build();
         ResultSet rs = qe.execSelect();
         while (rs.hasNext()) {
             QuerySolution qs = rs.next();
@@ -107,7 +105,7 @@ public class SparqlCommons {
         if (!validateResultVars(q, vars)) {
             return map;
         }
-        final QueryExecution qe = QueryExecutionFactory.sparqlService(fusekiUrl, q);
+        final QueryExecution qe = QueryExecutionHTTPBuilder.service(fusekiUrl).query(q).build();
         ResultSet rs = qe.execSelect();
         while (rs.hasNext()) {
             QuerySolution qs = rs.next();
@@ -132,8 +130,7 @@ public class SparqlCommons {
                 + "  ?ad adm:gitRepo ?rep " + "}";
         System.out.println(query);
         final Query q = QueryFactory.create(prefixes + " " + query);
-
-        final QueryExecution qe = QueryExecutionFactory.sparqlService(fusekiUrl, q);
+        final QueryExecution qe = QueryExecutionHTTPBuilder.service(fusekiUrl).query(q).build();
         ResultSet rs = qe.execSelect();
         while (rs.hasNext()) {
             QuerySolution qs = rs.next();
