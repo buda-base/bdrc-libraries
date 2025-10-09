@@ -80,6 +80,20 @@ public class StreamingHelpers {
             }
         };
     }
+    
+    public static StreamingResponseBody getModelStreamNoStable(final Model model, final String format, final String res, DocType docType,
+            PrefixMap prefixes) {
+
+        return new StreamingResponseBody() {
+            @Override
+            public void writeTo(OutputStream os) {
+                String JenaFormat = BudaMediaTypes.getJenaFromExtension(format);
+                if (JenaFormat.equals("STTL"))
+                	JenaFormat = "TTL";
+                model.write(os, JenaFormat);
+            }
+        };
+    }
 
     public static StreamingResponseBody getJsonObjectStream(Object obj) {
         return new StreamingResponseBody() {
